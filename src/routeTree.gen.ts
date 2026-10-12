@@ -9,27 +9,223 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApplicationsRouteImport } from './routes/applications'
+import { Route as CompareRouteImport } from './routes/compare'
+import { Route as DocumentsRouteImport } from './routes/documents'
+import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as FinderRouteImport } from './routes/finder'
+import { Route as HelpRouteImport } from './routes/help'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SchemesIdRouteImport } from './routes/schemes.$id'
 
-export interface FileRoutesByFullPath {}
-export interface FileRoutesByTo {}
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplicationsRoute = ApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentsRoute = DocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinderRoute = FinderRouteImport.update({
+  id: '/finder',
+  path: '/finder',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SchemesIdRoute = SchemesIdRouteImport.update({
+  id: '/schemes/$id',
+  path: '/schemes/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/applications': typeof ApplicationsRoute
+  '/compare': typeof CompareRoute
+  '/documents': typeof DocumentsRoute
+  '/explore': typeof ExploreRoute
+  '/finder': typeof FinderRoute
+  '/help': typeof HelpRoute
+  '/profile': typeof ProfileRoute
+  '/schemes/$id': typeof SchemesIdRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/applications': typeof ApplicationsRoute
+  '/compare': typeof CompareRoute
+  '/documents': typeof DocumentsRoute
+  '/explore': typeof ExploreRoute
+  '/finder': typeof FinderRoute
+  '/help': typeof HelpRoute
+  '/profile': typeof ProfileRoute
+  '/schemes/$id': typeof SchemesIdRoute
+}
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/applications': typeof ApplicationsRoute
+  '/compare': typeof CompareRoute
+  '/documents': typeof DocumentsRoute
+  '/explore': typeof ExploreRoute
+  '/finder': typeof FinderRoute
+  '/help': typeof HelpRoute
+  '/profile': typeof ProfileRoute
+  '/schemes/$id': typeof SchemesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths:
+    | '/'
+    | '/applications'
+    | '/compare'
+    | '/documents'
+    | '/explore'
+    | '/finder'
+    | '/help'
+    | '/profile'
+    | '/schemes/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to:
+    | '/'
+    | '/applications'
+    | '/compare'
+    | '/documents'
+    | '/explore'
+    | '/finder'
+    | '/help'
+    | '/profile'
+    | '/schemes/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/applications'
+    | '/compare'
+    | '/documents'
+    | '/explore'
+    | '/finder'
+    | '/help'
+    | '/profile'
+    | '/schemes/$id'
   fileRoutesById: FileRoutesById
 }
-export interface RootRouteChildren {}
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  ApplicationsRoute: typeof ApplicationsRoute
+  CompareRoute: typeof CompareRoute
+  DocumentsRoute: typeof DocumentsRoute
+  ExploreRoute: typeof ExploreRoute
+  FinderRoute: typeof FinderRoute
+  HelpRoute: typeof HelpRoute
+  ProfileRoute: typeof ProfileRoute
+  SchemesIdRoute: typeof SchemesIdRoute
 }
 
-const rootRouteChildren: RootRouteChildren = {}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/applications': {
+      id: '/applications'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof ApplicationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documents': {
+      id: '/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof DocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/finder': {
+      id: '/finder'
+      path: '/finder'
+      fullPath: '/finder'
+      preLoaderRoute: typeof FinderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schemes/$id': {
+      id: '/schemes/$id'
+      path: '/schemes/$id'
+      fullPath: '/schemes/$id'
+      preLoaderRoute: typeof SchemesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  ApplicationsRoute: ApplicationsRoute,
+  CompareRoute: CompareRoute,
+  DocumentsRoute: DocumentsRoute,
+  ExploreRoute: ExploreRoute,
+  FinderRoute: FinderRoute,
+  HelpRoute: HelpRoute,
+  ProfileRoute: ProfileRoute,
+  SchemesIdRoute: SchemesIdRoute,
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
