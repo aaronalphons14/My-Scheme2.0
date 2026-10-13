@@ -18,6 +18,13 @@ import {
 import { schemes, type Scheme } from "@/data/schemes";
 import { useSchemeStore } from "@/lib/store";
 import { matchScheme } from "@/lib/scheme-matching";
+import {
+  getLocalizedScheme,
+  getLocalizedCategory,
+  getLocalizedState,
+  getLocalizedApplicationMode,
+} from "@/lib/scheme-translations";
+import { getSiteText } from "@/lib/site-translations";
 
 export const Route = createFileRoute("/compare")({
   component: CompareSchemesPage,
@@ -30,8 +37,11 @@ function CompareSchemesPage() {
     clearCompare,
     profile,
     openApplyModal,
+    language,
+    t,
   } = useSchemeStore();
 
+  const site = getSiteText(language);
   const [addSelectorOpen, setAddSelectorOpen] = useState(false);
 
   // Selected scheme objects
@@ -67,13 +77,13 @@ function CompareSchemesPage() {
         <div>
           <div className="text-xs font-bold text-blue-900 uppercase tracking-wider flex items-center space-x-1.5">
             <Scale className="w-3.5 h-3.5" />
-            <span>Side-by-Side Matrix</span>
+            <span>{site.compare.matrixBadge}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">
-            Compare Schemes
+            {site.compare.title}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Compare benefits, eligibility criteria, documents, and application modes side-by-side.
+            {site.compare.subtitle}
           </p>
         </div>
 
@@ -85,15 +95,15 @@ function CompareSchemesPage() {
                 className="px-3.5 py-2 rounded-xl bg-blue-950 text-white text-xs font-bold hover:bg-blue-900 shadow-md flex items-center space-x-1.5"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Add Scheme ({selectedList.length}/4)</span>
+                <span>{site.compare.addSchemeBtn} ({selectedList.length}/4)</span>
               </button>
             )}
 
             <button
               onClick={clearCompare}
               className="p-2 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-600 hover:text-red-600 transition-colors"
-              title="Clear all schemes from comparison"
-              aria-label="Clear all"
+              title={site.compare.clearAllTooltip}
+              aria-label={site.compare.clearAllTooltip}
             >
               <Trash2 className="w-4 h-4" />
             </button>
@@ -111,7 +121,7 @@ function CompareSchemesPage() {
           <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 z-10 max-h-[80vh] flex flex-col">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
               <h3 className="text-sm font-bold text-slate-900">
-                Select Scheme to Compare
+                {site.compare.modalTitle}
               </h3>
               <button
                 onClick={() => setAddSelectorOpen(false)}
@@ -122,26 +132,29 @@ function CompareSchemesPage() {
             </div>
 
             <div className="flex-1 overflow-y-auto space-y-2 pr-1">
-              {availableToAdd.map((s) => (
-                <div
-                  key={s.id}
-                  onClick={() => {
-                    toggleCompareScheme(s.id);
-                    setAddSelectorOpen(false);
-                  }}
-                  className="p-3 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 cursor-pointer flex items-center justify-between transition-colors"
-                >
-                  <div>
-                    <span className="text-xs font-bold text-slate-900 block">
-                      {s.name}
-                    </span>
-                    <span className="text-[11px] text-slate-500">
-                      {s.category} · {s.benefit}
-                    </span>
+              {availableToAdd.map((s) => {
+                const loc = getLocalizedScheme(s, language);
+                return (
+                  <div
+                    key={s.id}
+                    onClick={() => {
+                      toggleCompareScheme(s.id);
+                      setAddSelectorOpen(false);
+                    }}
+                    className="p-3 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 cursor-pointer flex items-center justify-between transition-colors"
+                  >
+                    <div>
+                      <span className="text-xs font-bold text-slate-900 block">
+                        {loc.name}
+                      </span>
+                      <span className="text-[11px] text-slate-500">
+                        {loc.category} · {loc.benefit}
+                      </span>
+                    </div>
+                    <span className="text-xs font-bold text-blue-900">+ {site.compare.addSchemeBtn}</span>
                   </div>
-                  <span className="text-xs font-bold text-blue-900">+ Add</span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
@@ -155,27 +168,18 @@ function CompareSchemesPage() {
             <Scale className="w-8 h-8" />
           </div>
           <h2 className="text-base font-bold text-slate-900">
-            No schemes selected for comparison
+            {site.compare.emptyTitle}
           </h2>
           <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-            Select 2 to 4 schemes from Explore or recommendations to view a side-by-side comparison matrix.
+            {site.compare.emptyDesc}
           </p>
 
           <div className="mt-6 flex flex-wrap justify-center gap-2">
-            <button
-              onClick={() => {
-                toggleCompareScheme("pm-scholarship");
-                toggleCompareScheme("national-means-merit");
-              }}
-              className="px-4 py-2 rounded-xl bg-blue-950 text-white font-bold text-xs hover:bg-blue-900 shadow-md"
-            >
-              Compare Education Scholarships (Demo)
-            </button>
             <Link
               to="/explore"
-              className="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-50"
+              className="px-4 py-2 rounded-xl bg-blue-950 text-white font-bold text-xs hover:bg-blue-900 shadow-md"
             >
-              Browse Catalog
+              {site.compare.browseSchemesBtn}
             </Link>
           </div>
         </div>
@@ -191,12 +195,13 @@ function CompareSchemesPage() {
                 </th>
                 {evaluated.map(({ scheme, match }) => {
                   const isBest = scheme.id === bestForYouSchemeId;
+                  const loc = getLocalizedScheme(scheme, language);
                   return (
                     <th key={scheme.id} className="p-4 sm:p-5 font-bold align-top relative">
                       {isBest && (
                         <div className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider mb-2 shadow-xs">
                           <Award className="w-3 h-3" />
-                          <span>Best For You</span>
+                          <span>{site.compare.bestForYouBadge}</span>
                         </div>
                       )}
 
@@ -206,7 +211,7 @@ function CompareSchemesPage() {
                           params={{ id: scheme.id }}
                           className="text-sm font-extrabold text-slate-900 hover:text-blue-900 line-clamp-2"
                         >
-                          {scheme.name}
+                          {loc.name}
                         </Link>
                         <button
                           onClick={() => toggleCompareScheme(scheme.id)}
@@ -218,7 +223,7 @@ function CompareSchemesPage() {
                       </div>
 
                       <div className="text-[11px] font-medium text-slate-500 mt-1 line-clamp-1">
-                        {scheme.department}
+                        {loc.department}
                       </div>
                     </th>
                   );
@@ -246,18 +251,19 @@ function CompareSchemesPage() {
               {/* Row 2: Benefit Amount */}
               <tr className="hover:bg-slate-50/50">
                 <td className="p-4 font-bold text-slate-700 bg-slate-50/40">
-                  Benefit Amount
+                  {site.compare.benefitRow}
                 </td>
                 {evaluated.map(({ scheme }) => {
                   const isMax = scheme.benefitValue === maxBenefit && maxBenefit > 0;
+                  const loc = getLocalizedScheme(scheme, language);
                   return (
                     <td key={scheme.id} className="p-4">
                       <div className={`font-black text-sm ${isMax ? "text-emerald-800" : "text-slate-900"}`}>
-                        {scheme.benefit}
+                        {loc.benefit}
                       </div>
                       {isMax && (
                         <span className="inline-block mt-0.5 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-sm">
-                          Highest Value
+                          {site.compare.highestBenefitBadge}
                         </span>
                       )}
                     </td>
@@ -268,11 +274,11 @@ function CompareSchemesPage() {
               {/* Row 3: Scope */}
               <tr className="hover:bg-slate-50/50">
                 <td className="p-4 font-bold text-slate-700 bg-slate-50/40">
-                  Government Level
+                  {site.compare.govtLevelRow}
                 </td>
                 {evaluated.map(({ scheme }) => (
                   <td key={scheme.id} className="p-4 font-semibold text-slate-800">
-                    {scheme.scope === "Central" ? "Central Government" : `${scheme.state} State`}
+                    {scheme.scope === "Central" ? t.central : `${getLocalizedState(scheme.state, language)} (${t.state})`}
                   </td>
                 ))}
               </tr>
@@ -280,12 +286,12 @@ function CompareSchemesPage() {
               {/* Row 4: Category */}
               <tr className="hover:bg-slate-50/50">
                 <td className="p-4 font-bold text-slate-700 bg-slate-50/40">
-                  Category
+                  {site.compare.categoryRow}
                 </td>
                 {evaluated.map(({ scheme }) => (
                   <td key={scheme.id} className="p-4">
                     <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-900 font-bold text-[11px]">
-                      {scheme.category}
+                      {getLocalizedCategory(scheme.category, language)}
                     </span>
                   </td>
                 ))}
@@ -294,32 +300,35 @@ function CompareSchemesPage() {
               {/* Row 5: Eligibility Summary */}
               <tr className="hover:bg-slate-50/50">
                 <td className="p-4 font-bold text-slate-700 bg-slate-50/40">
-                  Eligibility Criteria
+                  {site.compare.criteriaRow}
                 </td>
-                {evaluated.map(({ scheme }) => (
-                  <td key={scheme.id} className="p-4 space-y-1 text-slate-600">
-                    <div>
-                      <strong>Age:</strong> {scheme.minAge || scheme.maxAge ? `${scheme.minAge ?? 0}–${scheme.maxAge ?? "any"} yrs` : "No limit"}
-                    </div>
-                    <div>
-                      <strong>Income Limit:</strong> {scheme.incomeMax ? `₹${scheme.incomeMax.toLocaleString("en-IN")}` : "No ceiling"}
-                    </div>
-                    <div>
-                      <strong>Occupation:</strong> <span className="capitalize">{scheme.occupations.join(", ")}</span>
-                    </div>
-                  </td>
-                ))}
+                {evaluated.map(({ scheme }) => {
+                  const loc = getLocalizedScheme(scheme, language);
+                  return (
+                    <td key={scheme.id} className="p-4 space-y-1 text-slate-600">
+                      <div>
+                        <strong>Age:</strong> {scheme.minAge || scheme.maxAge ? `${scheme.minAge ?? 0}–${scheme.maxAge ?? "any"} yrs` : "No limit"}
+                      </div>
+                      <div>
+                        <strong>Income:</strong> {scheme.incomeMax ? `₹${scheme.incomeMax.toLocaleString("en-IN")}` : "No ceiling"}
+                      </div>
+                      <div className="text-[11px] text-slate-500">
+                        {loc.summary}
+                      </div>
+                    </td>
+                  );
+                })}
               </tr>
 
               {/* Row 6: Required Documents */}
               <tr className="hover:bg-slate-50/50">
                 <td className="p-4 font-bold text-slate-700 bg-slate-50/40">
-                  Required Documents
+                  {site.compare.documentsRow}
                 </td>
                 {evaluated.map(({ scheme }) => (
                   <td key={scheme.id} className="p-4">
                     <div className="font-bold text-slate-900 mb-1">
-                      {scheme.requiredDocuments.length} Documents Required
+                      {scheme.requiredDocuments.length} {t.documentsRequired}
                     </div>
                     <ul className="list-disc list-inside text-slate-500 space-y-0.5 text-[11px]">
                       {scheme.requiredDocuments.map((doc) => (
@@ -333,11 +342,11 @@ function CompareSchemesPage() {
               {/* Row 7: Application Mode */}
               <tr className="hover:bg-slate-50/50">
                 <td className="p-4 font-bold text-slate-700 bg-slate-50/40">
-                  Application Mode
+                  {site.compare.modeRow}
                 </td>
                 {evaluated.map(({ scheme }) => (
                   <td key={scheme.id} className="p-4 font-semibold text-slate-800">
-                    {scheme.applicationMode}
+                    {getLocalizedApplicationMode(scheme.applicationMode, language)}
                   </td>
                 ))}
               </tr>
@@ -352,7 +361,7 @@ function CompareSchemesPage() {
                     <div className="font-bold">{scheme.deadline}</div>
                     {scheme.deadlineDays && (
                       <div className="text-amber-700 text-[11px]">
-                        {scheme.deadlineDays} days remaining
+                        {scheme.deadlineDays} {t.closingInDays}
                       </div>
                     )}
                   </td>
@@ -361,14 +370,14 @@ function CompareSchemesPage() {
 
               {/* Row 9: Actions */}
               <tr className="bg-slate-50/70">
-                <td className="p-4 font-bold text-slate-700">Action</td>
+                <td className="p-4 font-bold text-slate-700">{site.compare.actionRow}</td>
                 {evaluated.map(({ scheme }) => (
                   <td key={scheme.id} className="p-4">
                     <button
                       onClick={() => openApplyModal(scheme.id)}
                       className="w-full px-4 py-2 rounded-xl bg-blue-950 hover:bg-blue-900 text-white font-bold text-xs shadow-md transition-colors flex items-center justify-center space-x-1"
                     >
-                      <span>Apply</span>
+                      <span>{t.applyNow}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </td>

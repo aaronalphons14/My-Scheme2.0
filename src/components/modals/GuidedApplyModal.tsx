@@ -14,6 +14,8 @@ import {
 import { useSchemeStore } from "@/lib/store";
 import { schemes } from "@/data/schemes";
 import { matchScheme } from "@/lib/scheme-matching";
+import { getLocalizedScheme } from "@/lib/scheme-translations";
+import { getSiteText } from "@/lib/site-translations";
 
 export const GuidedApplyModal: React.FC = () => {
   const navigate = useNavigate();
@@ -24,8 +26,11 @@ export const GuidedApplyModal: React.FC = () => {
     profile,
     documents,
     addApplication,
+    language,
+    t,
   } = useSchemeStore();
 
+  const site = getSiteText(language);
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [trackingId, setTrackingId] = useState(
     () => `APP-2026-${Math.floor(10000 + Math.random() * 90000)}`,
@@ -35,10 +40,11 @@ export const GuidedApplyModal: React.FC = () => {
 
   if (!isApplyModalOpen || !applySchemeId) return null;
 
-  const scheme = schemes.find((s) => s.id === applySchemeId);
-  if (!scheme) return null;
+  const rawScheme = schemes.find((s) => s.id === applySchemeId);
+  if (!rawScheme) return null;
 
-  const match = matchScheme(scheme, profile);
+  const scheme = getLocalizedScheme(rawScheme, language);
+  const match = matchScheme(rawScheme, profile);
 
   // Document check
   const docStatus = scheme.requiredDocuments.map((docName) => {

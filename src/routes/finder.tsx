@@ -24,6 +24,7 @@ import { schemes } from "@/data/schemes";
 import { matchScheme, parseProfile } from "@/lib/scheme-matching";
 import { SchemeCard } from "@/components/schemes/SchemeCard";
 import { startSpeechRecognition, isSpeechRecognitionSupported, speakText, stopSpeaking } from "@/lib/speech";
+import { getSiteText } from "@/lib/site-translations";
 
 export const Route = createFileRoute("/finder")({
   component: SmartFinderPage,
@@ -47,6 +48,7 @@ type ChatMessage = {
 
 function SmartFinderPage() {
   const { profile, updateProfile, t, language } = useSchemeStore();
+  const site = getSiteText(language);
 
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
@@ -58,7 +60,7 @@ function SmartFinderPage() {
     {
       id: "msg-1",
       sender: "assistant",
-      text: "Namaste! I am your AI Scheme Discovery Assistant. Tell me about yourself in plain words — your age, state, what you do, or family income. I will instantly discover every central and state benefit made for you.",
+      text: site.finder.greeting,
       timestamp: "Just now",
     },
   ]);
@@ -72,13 +74,7 @@ function SmartFinderPage() {
   }, [messages, isTyping]);
 
   // Suggested questions chips
-  const suggestedPrompts = [
-    "🎓 I'm a 20-year-old student from Tamil Nadu. Family income ₹2.5 lakh per year.",
-    "🌾 I'm a farmer from Uttar Pradesh looking for direct financial assistance & crop insurance.",
-    "💼 I'm a 28-year-old woman entrepreneur looking to start a food enterprise with subsidies.",
-    "🏠 Urban resident with ₹4.5 lakh annual income looking for housing interest subsidy.",
-    "🏥 Seeking cashless healthcare coverage for a family of 5 with elderly parents.",
-  ];
+  const suggestedPrompts = site.finder.prompts;
 
   // Live ranking of schemes based on current profile
   const rankedSchemes = schemes
@@ -196,10 +192,10 @@ function SmartFinderPage() {
             <span>AI Conversational Engine</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900">
-            Smart Scheme Finder
+            {site.finder.title}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Describe your situation in natural language. Our engine extracts your parameters and ranks schemes live.
+            {site.finder.subtitle}
           </p>
         </div>
 
@@ -209,14 +205,14 @@ function SmartFinderPage() {
             className="px-3.5 py-2 rounded-xl bg-white border border-slate-300 hover:border-slate-400 text-slate-800 text-xs font-bold shadow-2xs flex items-center space-x-1.5 transition-colors"
           >
             <Edit2 className="w-3.5 h-3.5 text-blue-900" />
-            <span>Update My Details</span>
+            <span>{site.finder.editProfileBtn}</span>
           </button>
 
           <button
             onClick={handleReset}
             className="p-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-colors"
-            title="Reset conversation"
-            aria-label="Reset conversation"
+            title={site.finder.resetChat}
+            aria-label={site.finder.resetChat}
           >
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -370,7 +366,7 @@ function SmartFinderPage() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type in English, Hindi, Tamil... e.g. 'I am 22yo student from Karnataka'"
+                placeholder={site.finder.inputPlaceholder}
                 className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-900 placeholder:text-slate-400"
               />
 
@@ -383,8 +379,8 @@ function SmartFinderPage() {
                     ? "bg-red-500 text-white animate-pulse"
                     : "text-slate-500 hover:text-blue-900 hover:bg-slate-100 border border-slate-300"
                 }`}
-                title="Speak to the AI Assistant"
-                aria-label="Voice input button"
+                title={site.finder.voiceBtn}
+                aria-label={site.finder.voiceBtn}
               >
                 {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
               </button>
@@ -394,7 +390,7 @@ function SmartFinderPage() {
                 type="submit"
                 disabled={!input.trim()}
                 className="p-2.5 rounded-xl bg-blue-950 text-white hover:bg-blue-900 disabled:opacity-40 transition-colors"
-                aria-label="Send message"
+                aria-label={site.finder.sendBtn}
               >
                 <Send className="w-5 h-5" />
               </button>
@@ -407,10 +403,10 @@ function SmartFinderPage() {
           <div className="bg-slate-900 text-white p-4 rounded-2xl flex items-center justify-between shadow-md">
             <div>
               <div className="text-[11px] font-bold text-amber-400 uppercase tracking-wider">
-                Live Matched Results
+                {site.finder.liveMatchesTitle}
               </div>
               <h2 className="text-base font-bold text-white mt-0.5">
-                {displaySchemes.length} Schemes Discovered
+                {displaySchemes.length} {site.home.schemesCountSuffix}
               </h2>
             </div>
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-800 text-blue-200">

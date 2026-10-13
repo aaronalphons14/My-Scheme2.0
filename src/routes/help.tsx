@@ -15,13 +15,15 @@ import {
   BookOpen,
 } from "lucide-react";
 import { useSchemeStore } from "@/lib/store";
+import { getSiteText } from "@/lib/site-translations";
 
 export const Route = createFileRoute("/help")({
   component: HelpPage,
 });
 
 function HelpPage() {
-  const { setIsOnboardingOpen } = useSchemeStore();
+  const { setIsOnboardingOpen, language } = useSchemeStore();
+  const site = getSiteText(language);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   // Feedback form state
@@ -72,13 +74,13 @@ function HelpPage() {
         <div>
           <div className="text-xs font-bold text-blue-900 uppercase tracking-wider flex items-center space-x-1.5">
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>Citizen Assistance</span>
+            <span>{site.help.badge}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">
-            Help Centre & Frequently Asked Questions
+            {site.help.title}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Answers to common questions, toll-free national helplines, and user guides.
+            {site.help.subtitle}
           </p>
         </div>
 
@@ -87,7 +89,7 @@ function HelpPage() {
           className="px-4 py-2 rounded-xl bg-blue-50 border border-blue-200 text-blue-950 font-bold text-xs hover:bg-blue-100 flex items-center space-x-1.5 transition-colors self-start sm:self-auto"
         >
           <BookOpen className="w-4 h-4 text-blue-900" />
-          <span>Replay Welcome Tour</span>
+          <span>{site.help.replayTourBtn}</span>
         </button>
       </div>
 
@@ -99,13 +101,13 @@ function HelpPage() {
           </div>
           <div>
             <div className="text-[11px] font-bold text-blue-900 uppercase tracking-wider">
-              National Helpdesk
+              {site.help.helplineTitle}
             </div>
             <div className="text-lg font-black text-slate-900 mt-0.5">
               1800-115-555
             </div>
             <p className="text-xs text-slate-500 mt-1">
-              Toll-free 24x7 support for national citizen scheme inquiries.
+              {site.help.helplineDesc}
             </p>
           </div>
         </div>
@@ -116,13 +118,13 @@ function HelpPage() {
           </div>
           <div>
             <div className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">
-              PM-JAY Health Line
+              {site.help.pmjayTitle}
             </div>
             <div className="text-lg font-black text-slate-900 mt-0.5">
               14555 / 1800-111-565
             </div>
             <p className="text-xs text-slate-500 mt-1">
-              Ayushman Bharat cashless hospitalisation and card generation.
+              {site.help.pmjayDesc}
             </p>
           </div>
         </div>
@@ -133,13 +135,13 @@ function HelpPage() {
           </div>
           <div>
             <div className="text-[11px] font-bold text-amber-800 uppercase tracking-wider">
-              PM-KISAN Helpline
+              {site.help.pmkisanTitle}
             </div>
             <div className="text-lg font-black text-slate-900 mt-0.5">
               155261 / 011-24300606
             </div>
             <p className="text-xs text-slate-500 mt-1">
-              Farmer installment DBT and e-KYC query resolution.
+              {site.help.pmkisanDesc}
             </p>
           </div>
         </div>
@@ -204,7 +206,7 @@ function HelpPage() {
       {/* 3. FAQ ACCORDION */}
       <div className="space-y-4">
         <h2 className="text-xl font-bold text-slate-900">
-          Frequently Asked Questions
+          {site.help.faqTitle}
         </h2>
 
         <div className="space-y-3">
@@ -249,17 +251,17 @@ function HelpPage() {
 
         <div>
           <h2 className="text-base font-bold text-slate-900">
-            Citizen Feedback & Suggestions
+            {site.help.feedbackTitle}
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            Was myScheme 2.0 helpful in discovering your government entitlements?
+            {site.help.feedbackSubtitle}
           </p>
         </div>
 
         {feedbackSubmitted ? (
           <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-bold flex items-center justify-center space-x-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>Thank you for your valuable feedback!</span>
+            <span>{site.help.feedbackThankYou}</span>
           </div>
         ) : (
           <form onSubmit={handleFeedbackSubmit} className="space-y-4 text-left">
@@ -287,7 +289,7 @@ function HelpPage() {
               rows={3}
               value={feedbackText}
               onChange={(e) => setFeedbackText(e.target.value)}
-              placeholder="Tell us what you liked or how we can make scheme discovery easier..."
+              placeholder={site.help.feedbackPlaceholder}
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-blue-900 placeholder:text-slate-400"
             />
 
@@ -296,7 +298,7 @@ function HelpPage() {
               className="w-full py-2.5 rounded-xl bg-blue-950 hover:bg-blue-900 text-white font-bold text-xs shadow-md transition-colors flex items-center justify-center space-x-1.5"
             >
               <Send className="w-3.5 h-3.5" />
-              <span>Submit Feedback</span>
+              <span>{site.help.submitFeedbackBtn}</span>
             </button>
           </form>
         )}

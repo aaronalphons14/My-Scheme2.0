@@ -103,6 +103,12 @@ export type Translations = {
   viewProfile: string;
   screenAudio: string;
   stopAudio: string;
+  navExplore: string;
+  navFinder: string;
+  navCompare: string;
+  navServices: string;
+  navSearch: string;
+  officialBadge: string;
 };
 
 export const translations: Record<LanguageCode, Translations> = {
@@ -209,6 +215,12 @@ export const translations: Record<LanguageCode, Translations> = {
     viewProfile: "View Full Profile",
     screenAudio: "Screen Audio",
     stopAudio: "Stop Audio",
+    navExplore: "Explore",
+    navFinder: "AI Finder",
+    navCompare: "Compare",
+    navServices: "Services",
+    navSearch: "Search",
+    officialBadge: "Official",
   },
   hi: {
     portalName: "मायस्कीम 2.0",
@@ -313,6 +325,12 @@ export const translations: Record<LanguageCode, Translations> = {
     viewProfile: "पूर्ण प्रोफ़ाइल देखें",
     screenAudio: "स्क्रीन ऑडियो",
     stopAudio: "ऑडियो रोकें",
+    navExplore: "खोजें",
+    navFinder: "AI खोजक",
+    navCompare: "तुलना",
+    navServices: "सेवाएं",
+    navSearch: "खोजें",
+    officialBadge: "आधिकारिक",
   },
   ta: {
     portalName: "மைஸ்கீம் 2.0",
@@ -417,6 +435,12 @@ export const translations: Record<LanguageCode, Translations> = {
     viewProfile: "முழு விவரக்குறிப்பைப் பார்க்கவும்",
     screenAudio: "திரை ஆடியோ",
     stopAudio: "ஆடியோவை நிறுத்து",
+    navExplore: "ஆராய்க",
+    navFinder: "AI தேடல்",
+    navCompare: "ஒப்பீடு",
+    navServices: "சேவைகள்",
+    navSearch: "தேடுக",
+    officialBadge: "அரசு",
   },
   te: {
     portalName: "మైస్కీమ్ 2.0",
@@ -521,6 +545,12 @@ export const translations: Record<LanguageCode, Translations> = {
     viewProfile: "పూర్తి ప్రొఫైల్ చూడండి",
     screenAudio: "స్క్రీన్ ఆడియో",
     stopAudio: "ఆడియో ఆపు",
+    navExplore: "అన్వేషించండి",
+    navFinder: "AI ఫైండర్",
+    navCompare: "పోలిక",
+    navServices: "సేవలు",
+    navSearch: "శోధన",
+    officialBadge: "అధికారిక",
   },
   kn: {
     portalName: "ಮೈಸ್ಕೀಮ್ 2.0",
@@ -625,6 +655,12 @@ export const translations: Record<LanguageCode, Translations> = {
     viewProfile: "ಪೂರ್ಣ ಪ್ರೊಫೈಲ್ ವೀಕ್ಷಿಸಿ",
     screenAudio: "ಸ್ಕ್ರೀನ್ ಆಡಿಯೊ",
     stopAudio: "ಆಡಿಯೊ ನಿಲ್ಲಿಸಿ",
+    navExplore: "ಅನ್ವೇಷಿಸಿ",
+    navFinder: "AI ಹುಡುಕಾಟ",
+    navCompare: "ಹೋಲಿಕೆ",
+    navServices: "ಸೇವೆಗಳು",
+    navSearch: "ಹುಡುಕಿ",
+    officialBadge: "ಅಧಿಕೃತ",
   },
   ml: {
     portalName: "മൈസ്കീം 2.0",
@@ -729,5 +765,11 @@ export const translations: Record<LanguageCode, Translations> = {
     viewProfile: "മുഴുവൻ പ്രൊഫൈൽ കാണുക",
     screenAudio: "സ്ക്രീൻ ഓഡിയോ",
     stopAudio: "ഓഡിയോ നിർത്തുക",
+    navExplore: "പര്യവേക്ഷണം",
+    navFinder: "AI ഫൈൻഡർ",
+    navCompare: "താരതമ്യം",
+    navServices: "സേവനങ്ങൾ",
+    navSearch: "തിരയുക",
+    officialBadge: "ഔദ്യോഗികം",
   },
 };

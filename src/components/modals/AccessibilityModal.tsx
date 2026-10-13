@@ -8,9 +8,60 @@ interface AccessibilityModalProps {
 }
 
 export const AccessibilityModal: React.FC<AccessibilityModalProps> = ({ isOpen, onClose }) => {
-  const { a11y, updateA11y, t } = useSchemeStore();
+  const { a11y, updateA11y, t, language } = useSchemeStore();
 
   if (!isOpen) return null;
+
+  const a11yTexts = {
+    en: {
+      subtitle: "Customise view and reading preferences (WCAG 2.1 AAA Compliant)",
+      reset: "Reset to Standard",
+      apply: "Apply & Save",
+      highContrastDesc: "Maximum contrast yellow-on-black theme for low vision users",
+      voiceDesc: "Enable text-to-speech reading buttons on all scheme descriptions",
+      motionDesc: "Disables animations and transitions for users prone to motion discomfort",
+    },
+    hi: {
+      subtitle: "देखने और पढ़ने की प्राथमिकताएं अनुकूलित करें (WCAG 2.1 AAA)",
+      reset: "मानक पर रीसेट करें",
+      apply: "लागू करें और सहेजें",
+      highContrastDesc: "कम दृष्टि वाले उपयोगकर्ताओं के लिए उच्च कंट्रास्ट थीम",
+      voiceDesc: "सभी योजनाओं के विवरण पर टेक्स्ट-टू-स्पीच बटन सक्षम करें",
+      motionDesc: "मोशन असुविधा से ग्रस्त उपयोगकर्ताओं के लिए एनिमेशन बंद करें",
+    },
+    ta: {
+      subtitle: "பார்வை மற்றும் வாசிப்பு விருப்பங்களை மாற்றவும் (WCAG 2.1 AAA)",
+      reset: "இயல்புநிலைக்கு மீட்டமை",
+      apply: "பயன்படுத்தி சேமி",
+      highContrastDesc: "பார்வைக்குறைபாடு உள்ள பயனர்களுக்கான அதிக மாறுபட்ட வண்ண தீம்",
+      voiceDesc: "அனைத்து திட்ட விளக்கங்களிலும் உரை-பேச்சு பொத்தான்களை இயக்கு",
+      motionDesc: "இயக்க அசௌகரியம் உள்ள பயனர்களுக்கான அனிமேஷன்களை முடக்கு",
+    },
+    te: {
+      subtitle: "వీక్షణ మరియు పఠన ప్రాధాన్యతలను అనుకూలీకరించండి (WCAG 2.1 AAA)",
+      reset: "ప్రామాణికానికి రీసెట్ చేయండి",
+      apply: "వర్తించు & సేవ్ చేయి",
+      highContrastDesc: "తక్కువ దృష్టి వినియోగదారుల కోసం హై కాంట్రాస్ట్ థీమ్",
+      voiceDesc: "అన్ని పథకాల వివరణలలో టెక్స్ట్-టు-స్పీచ్ బటన్‌లను ప్రారంభించండి",
+      motionDesc: "మోషన్ అసౌకర్యానికి గురయ్యే వినియోగదారుల కోసం యానిమేషన్‌లను నిలిపివేయండి",
+    },
+    kn: {
+      subtitle: "ವೀಕ್ಷಣೆ ಮತ್ತು ಓದುವ ಆದ್ಯತೆಗಳನ್ನು ಹೊಂದಿಸಿ (WCAG 2.1 AAA)",
+      reset: "ಸ್ಟ್ಯಾಂಡರ್ಡ್‌ಗೆ ಮರುಹೊಂದಿಸಿ",
+      apply: "ಅನ್ವಯಿಸಿ & ಉಳಿಸಿ",
+      highContrastDesc: "ಕಡಿಮೆ ದೃಷ್ಟಿ ಬಳಕೆದಾರರಿಗೆ ಹೈ ಕಾಂಟ್ರಾಸ್ಟ್ ಥೀಮ್",
+      voiceDesc: "ಎಲ್ಲಾ ಯೋಜನೆಗಳ ವಿವರಣೆಗಳಲ್ಲಿ ಪಠ್ಯದಿಂದ ಭಾಷಣ ಬಟನ್ ಸಕ್ರಿಯಗೊಳಿಸಿ",
+      motionDesc: "ಚಲನೆಯ ಅಸ್ವಸ್ಥತೆ ಇರುವ ಬಳಕೆದಾರರಿಗೆ ಅನಿಮೇಷನ್‌ಗಳನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ",
+    },
+    ml: {
+      subtitle: "കാഴ്ച, വായനാ മുൻഗണനകൾ ക്രമീകരിക്കുക (WCAG 2.1 AAA)",
+      reset: "സാധാരണ നിലയിലേക്ക് മാറ്റുക",
+      apply: "പ്രയോഗിച്ച് സേവ് ചെയ്യുക",
+      highContrastDesc: "കുറഞ്ഞ കാഴ്ചയുള്ള ഉപയോക്താക്കൾക്കായി ഹൈ കോൺട്രാസ്റ്റ് തീം",
+      voiceDesc: "എല്ലാ പദ്ധതി വിവരണങ്ങളിലും ടെക്സ്റ്റ്-ടു-സ്പീച്ച് ബട്ടണുകൾ സജീവമാക്കുക",
+      motionDesc: "മോഷൻ അസ്വസ്ഥതയുള്ള ഉപയോക്താക്കൾക്കായി ആനിമേഷനുകൾ ഒഴിവാക്കുക",
+    },
+  }[language];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -38,7 +89,7 @@ export const AccessibilityModal: React.FC<AccessibilityModalProps> = ({ isOpen, 
                 {t.a11ySettings}
               </h2>
               <p className="text-xs text-slate-500">
-                Customise view and reading preferences (WCAG 2.1 AAA Compliant)
+                {a11yTexts.subtitle}
               </p>
             </div>
           </div>
@@ -88,7 +139,7 @@ export const AccessibilityModal: React.FC<AccessibilityModalProps> = ({ isOpen, 
                 {t.highContrast}
               </div>
               <div className="text-xs text-slate-500 mt-0.5">
-                Maximum contrast yellow-on-black theme for low vision users
+                {a11yTexts.highContrastDesc}
               </div>
             </div>
             <button
@@ -115,7 +166,7 @@ export const AccessibilityModal: React.FC<AccessibilityModalProps> = ({ isOpen, 
                 <span>{t.voiceAssistance}</span>
               </div>
               <div className="text-xs text-slate-500 mt-0.5">
-                Enable text-to-speech reading buttons on all scheme descriptions
+                {a11yTexts.voiceDesc}
               </div>
             </div>
             <button
@@ -141,7 +192,7 @@ export const AccessibilityModal: React.FC<AccessibilityModalProps> = ({ isOpen, 
                 {t.reduceMotion}
               </div>
               <div className="text-xs text-slate-500 mt-0.5">
-                Disables animations and transitions for users prone to motion discomfort
+                {a11yTexts.motionDesc}
               </div>
             </div>
             <button
@@ -176,14 +227,14 @@ export const AccessibilityModal: React.FC<AccessibilityModalProps> = ({ isOpen, 
             className="flex items-center space-x-1.5 text-xs text-slate-500 hover:text-slate-800 transition-colors"
           >
             <RefreshCcw className="w-3.5 h-3.5" />
-            <span>Reset to Standard</span>
+            <span>{a11yTexts.reset}</span>
           </button>
 
           <button
             onClick={onClose}
             className="px-5 py-2 rounded-xl bg-blue-950 text-white font-bold text-xs hover:bg-blue-900 shadow-md transition-colors"
           >
-            Apply & Save
+            {a11yTexts.apply}
           </button>
         </div>
       </div>

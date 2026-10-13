@@ -103,8 +103,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
 
       {/* Top Official Government of India Header Stripe */}
       <div className="bg-slate-900 text-slate-100 text-xs border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between">
-          <div className="flex items-center space-x-2 shrink-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between gap-2">
+          <div className="flex items-center space-x-2 min-w-0 shrink">
             {/* Indian Tricolor subtle flag accent */}
             <div className="flex h-3 w-5 overflow-hidden rounded-xs border border-white/20 shadow-xs shrink-0" aria-hidden="true">
               <span className="w-1/3 bg-[#FF9933] h-full" />
@@ -113,11 +113,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
               </span>
               <span className="w-1/3 bg-[#138808] h-full" />
             </div>
-            <span className="font-medium text-slate-200 whitespace-nowrap">
+            <span className="font-medium text-slate-200 whitespace-nowrap shrink-0">
               भारत सरकार | Government of India
             </span>
-            <span className="hidden md:inline-block text-slate-400">·</span>
-            <span className="hidden md:inline-block text-slate-400 truncate max-w-[200px] lg:max-w-none">
+            <span className="hidden md:inline-block text-slate-400 shrink-0">·</span>
+            <span className="hidden md:inline-block text-slate-400 truncate max-w-[150px] lg:max-w-[260px] xl:max-w-none">
               {t.nationalPortal}
             </span>
           </div>
@@ -191,11 +191,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
 
       {/* Main Sticky Navbar */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-2xs w-full">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16 sm:h-[68px] gap-3 sm:gap-4 w-full">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6">
+          <div className="flex items-center justify-between h-16 sm:h-[66px] gap-2 lg:gap-3 xl:gap-4 w-full">
             
             {/* Left Section: Brand & Desktop Navigation Group */}
-            <div className="flex items-center space-x-3 sm:space-x-4 lg:space-x-6 shrink-0">
+            <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-3 xl:space-x-5 min-w-0">
               {/* Brand & Logo */}
               <Link to="/" className="flex items-center space-x-2 sm:space-x-2.5 shrink-0 group">
                 <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-950 text-white flex items-center justify-center shadow-md shadow-blue-950/15 group-hover:scale-105 transition-transform shrink-0">
@@ -211,55 +211,52 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                 </div>
 
                 <div className="flex items-center space-x-1.5 shrink-0">
-                  <span className="text-base sm:text-lg font-black tracking-tight text-blue-950 group-hover:text-blue-900 transition-colors leading-none">
+                  <span className="text-base sm:text-lg font-black tracking-tight text-blue-950 group-hover:text-blue-900 transition-colors leading-normal whitespace-nowrap">
                     {t.portalName}
                   </span>
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs text-[9px] font-bold bg-blue-100 text-blue-900 leading-none">
-                    {t.official}
+                  <span className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded-xs text-[9px] font-bold bg-blue-100 text-blue-900 leading-normal shrink-0 whitespace-nowrap">
+                    {t.officialBadge}
                   </span>
                 </div>
               </Link>
 
               {/* Desktop Navigation Links */}
-              <nav className="hidden lg:flex items-center space-x-1 xl:space-x-1.5 font-medium text-xs xl:text-sm text-slate-700 shrink-0">
+              <nav className="hidden lg:flex items-center space-x-0.5 xl:space-x-1.5 font-medium text-xs xl:text-sm text-slate-700 shrink-0">
                 <Link
                   to="/explore"
-                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors ${
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-colors ${
                     currentPath.startsWith("/explore")
                       ? "text-blue-950 bg-blue-50/90 font-bold border border-blue-100/60 shadow-2xs"
                       : "hover:text-blue-950 hover:bg-slate-100/80"
                   }`}
                 >
-                  {t.explore}
+                  {t.navExplore}
                 </Link>
 
                 <Link
                   to="/finder"
-                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-1.5 ${
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-1.5 ${
                     currentPath.startsWith("/finder")
                       ? "text-blue-950 bg-blue-50/90 font-bold border border-blue-100/60 shadow-2xs"
                       : "hover:text-blue-950 hover:bg-slate-100/80"
                   }`}
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse shrink-0" />
-                  <span>{t.smartFinder}</span>
-                  <span className="text-[9px] font-black px-1.5 py-0.2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white uppercase tracking-wider leading-none">
-                    AI
-                  </span>
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  <span>{t.navFinder}</span>
                 </Link>
 
                 <Link
                   to="/compare"
-                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-1.5 ${
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-1.5 ${
                     currentPath.startsWith("/compare")
                       ? "text-blue-950 bg-blue-50/90 font-bold border border-blue-100/60 shadow-2xs"
                       : "hover:text-blue-950 hover:bg-slate-100/80"
                   }`}
                 >
                   <Scale className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <span>{t.compare}</span>
+                  <span>{t.navCompare}</span>
                   {comparedSchemes.length > 0 && (
-                    <span className="w-4 h-4 rounded-full bg-blue-700 text-white text-[10px] flex items-center justify-center font-bold">
+                    <span className="w-4 h-4 rounded-full bg-blue-700 text-white text-[10px] flex items-center justify-center font-bold shrink-0">
                       {comparedSchemes.length}
                     </span>
                   )}
@@ -269,7 +266,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                 <div className="relative">
                   <button
                     onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
-                    className={`px-2.5 xl:px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-1 cursor-pointer ${
+                    className={`px-2 xl:px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-1 cursor-pointer ${
                       currentPath.startsWith("/documents") ||
                       currentPath.startsWith("/applications") ||
                       currentPath.startsWith("/help")
@@ -278,9 +275,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                     }`}
                     aria-expanded={servicesDropdownOpen}
                   >
-                    <span>{t.services}</span>
+                    <span>{t.navServices}</span>
                     <ChevronDown
-                      className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-200 ${
+                      className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-200 shrink-0 ${
                         servicesDropdownOpen ? "rotate-180" : ""
                       }`}
                     />
@@ -334,18 +331,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
             </div>
 
             {/* Right Section: Search Trigger, Notifications, Profile, Mobile Menu */}
-            <div className="flex items-center space-x-1.5 sm:space-x-2 xl:space-x-3 shrink-0">
+            <div className="flex items-center space-x-1 sm:space-x-1.5 xl:space-x-2.5 shrink-0">
               {/* Quick Search Button */}
               <button
                 onClick={onOpenSearch}
-                className="hidden sm:flex items-center justify-between w-28 sm:w-32 px-2.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-800 bg-slate-100/90 hover:bg-slate-200/70 border border-slate-200 text-xs transition-colors shrink-0 cursor-pointer"
+                className="hidden sm:flex items-center justify-between w-24 sm:w-28 xl:w-32 px-2.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-800 bg-slate-100/90 hover:bg-slate-200/70 border border-slate-200 text-xs transition-colors shrink-0 cursor-pointer"
                 aria-label="Search schemes"
               >
                 <div className="flex items-center space-x-1.5 min-w-0">
                   <Search className="w-3.5 h-3.5 text-blue-900 shrink-0" />
-                  <span className="font-medium truncate">{t.searchSchemes}...</span>
+                  <span className="font-medium truncate">{t.navSearch}...</span>
                 </div>
-                <kbd className="hidden lg:inline-block px-1 py-0.5 text-[9px] font-mono bg-white rounded-sm border border-slate-300 text-slate-400 shrink-0">
+                <kbd className="hidden xl:inline-block px-1 py-0.5 text-[9px] font-mono bg-white rounded-sm border border-slate-300 text-slate-400 shrink-0">
                   Ctrl K
                 </kbd>
               </button>
@@ -449,7 +446,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                   </div>
 
                   {/* Profile name only visible on wide screens (2xl+) so it never squeezes standard laptops */}
-                  <div className="hidden 2xl:flex flex-col text-left max-w-[110px] min-w-0">
+                  <div className="hidden 2xl:flex flex-col text-left max-w-[95px] min-w-0 leading-tight">
                     <span className="text-xs font-bold text-slate-900 truncate">
                       {profile.name || "Citizen User"}
                     </span>
@@ -459,7 +456,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                   </div>
 
                   <ChevronDown
-                    className={`hidden sm:block w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-transform duration-200 ${
+                    className={`hidden sm:block w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-transform duration-200 shrink-0 ${
                       profileDropdownOpen ? "rotate-180" : ""
                     }`}
                   />

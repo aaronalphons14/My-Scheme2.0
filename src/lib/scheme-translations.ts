@@ -1070,7 +1070,8 @@ export function getLocalizedCriterion(criterion: string, language: LanguageCode)
   return criterionLabels[language]?.[criterion] || criterion;
 }
 
-export function getLocalizedState(stateName: string, language: LanguageCode): string {
+export function getLocalizedState(stateName: string | undefined, language: LanguageCode): string {
+  if (!stateName) return "";
   return stateLabels[language]?.[stateName] || stateName;
 }
 

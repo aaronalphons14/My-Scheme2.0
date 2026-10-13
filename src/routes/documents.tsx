@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { useSchemeStore } from "@/lib/store";
 import { schemes, documentGuides, type Scheme } from "@/data/schemes";
+import { getLocalizedScheme, getLocalizedCategory } from "@/lib/scheme-translations";
+import { getSiteText } from "@/lib/site-translations";
 
 export const Route = createFileRoute("/documents")({
   component: DocumentsPage,
@@ -26,17 +28,21 @@ function DocumentsPage() {
     documents,
     updateDocumentStatus,
     openApplyModal,
+    language,
+    t,
   } = useSchemeStore();
 
+  const site = getSiteText(language);
   const [selectedSchemeId, setSelectedSchemeId] = useState("pm-scholarship");
   const [reminderToast, setReminderToast] = useState<string | null>(null);
   const [uploadModalDocId, setUploadModalDocId] = useState<string | null>(null);
   const [mockFileName, setMockFileName] = useState("");
 
-  const activeScheme = schemes.find((s) => s.id === selectedSchemeId) || schemes[0];
+  const rawActiveScheme = (schemes.find((s) => s.id === selectedSchemeId) || schemes[0])!;
+  const activeScheme = getLocalizedScheme(rawActiveScheme, language);
 
   // Calculate readiness for active scheme
-  const schemeDocReadiness = activeScheme.requiredDocuments.map((reqDoc) => {
+  const schemeDocReadiness = rawActiveScheme.requiredDocuments.map((reqDoc) => {
     const vaultMatch = documents.find(
       (d) =>
         d.name.toLowerCase().includes(reqDoc.toLowerCase()) ||
@@ -82,20 +88,20 @@ function DocumentsPage() {
         <div>
           <div className="text-xs font-bold text-blue-900 uppercase tracking-wider flex items-center space-x-1.5">
             <Lock className="w-3.5 h-3.5" />
-            <span>Digital Citizen Vault</span>
+            <span>{site.documents.vaultBadge}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">
-            Document Readiness Checker
+            {site.documents.title}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Store, verify, and measure your document readiness before starting any official scheme application.
+            {site.documents.subtitle}
           </p>
         </div>
 
         <div className="flex items-center space-x-2">
           <span className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>DigiLocker Integration Ready</span>
+            <span>{site.documents.digilockerBadge}</span>
           </span>
         </div>
       </div>
@@ -110,31 +116,34 @@ function DocumentsPage() {
                 Per-Scheme Readiness Engine
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
-                Check Readiness for Specific Scheme
+                {site.documents.readinessTitle}
               </h2>
             </div>
 
             <div className="max-w-md">
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Select Scheme to Check:
+                {site.documents.selectSchemeLabel}:
               </label>
               <select
                 value={selectedSchemeId}
                 onChange={(e) => setSelectedSchemeId(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer"
               >
-                {schemes.map((s) => (
-                  <option key={s.id} value={s.id} className="text-slate-900">
-                    {s.name} ({s.category})
-                  </option>
-                ))}
+                {schemes.map((s) => {
+                  const loc = getLocalizedScheme(s, language);
+                  return (
+                    <option key={s.id} value={s.id} className="text-slate-900">
+                      {loc.name} ({getLocalizedCategory(s.category, language)})
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
             <p className="text-xs text-slate-300 leading-relaxed max-w-lg">
               {readinessPercentage === 100
-                ? "🎉 You have all required documents verified in your vault. You are 100% ready to apply without delays!"
-                : `⚠️ You are missing ${totalCount - readyCount} of ${totalCount} required documents for this scheme. Review the checklist below.`}
+                ? `🎉 ${site.documents.allDocsReady}`
+                : `⚠️ ${site.documents.missingDocsNotice} (${totalCount - readyCount}/${totalCount})`}
             </p>
           </div>
 
@@ -178,10 +187,10 @@ function DocumentsPage() {
             </div>
 
             <button
-              onClick={() => openApplyModal(activeScheme.id)}
+              onClick={() => openApplyModal(rawActiveScheme.id)}
               className="mt-4 w-full py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow-md transition-colors flex items-center justify-center space-x-1"
             >
-              <span>Apply Now</span>
+              <span>{t.applyNow}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

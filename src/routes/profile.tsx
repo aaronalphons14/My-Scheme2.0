@@ -16,6 +16,8 @@ import {
 import { useSchemeStore } from "@/lib/store";
 import { schemes } from "@/data/schemes";
 import { SchemeCard } from "@/components/schemes/SchemeCard";
+import { getLocalizedState } from "@/lib/scheme-translations";
+import { getSiteText } from "@/lib/site-translations";
 
 export const Route = createFileRoute("/profile")({
   component: ProfilePage,
@@ -27,8 +29,11 @@ function ProfilePage() {
     updateProfile,
     clearProfile,
     savedSchemes,
+    language,
     t,
   } = useSchemeStore();
+
+  const site = getSiteText(language);
 
   const [name, setName] = useState(profile.name || "");
   const [age, setAge] = useState<number | "">(profile.age ?? "");
@@ -96,13 +101,13 @@ function ProfilePage() {
         <div>
           <div className="text-xs font-bold text-blue-900 uppercase tracking-wider flex items-center space-x-1.5">
             <User className="w-3.5 h-3.5" />
-            <span>Citizen Profile</span>
+            <span>{site.profile.badge}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">
-            Eligibility & Profile Manager
+            {site.profile.title}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Keep your profile up to date to get accurate eligibility scores and personalized scheme matches.
+            {site.profile.subtitle}
           </p>
         </div>
 
@@ -111,7 +116,7 @@ function ProfilePage() {
           className="px-3.5 py-2 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center space-x-1.5 transition-colors self-start sm:self-auto"
         >
           <RotateCcw className="w-3.5 h-3.5" />
-          <span>Reset Profile</span>
+          <span>{site.profile.resetProfileBtn}</span>
         </button>
       </div>
 
@@ -120,7 +125,7 @@ function ProfilePage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <div>
             <div className="text-xs font-bold text-amber-400 uppercase tracking-wider">
-              Profile Completeness
+              {site.profile.completenessLabel}
             </div>
             <div className="text-2xl font-black text-white mt-0.5">
               {completeness}% Completed
@@ -142,9 +147,7 @@ function ProfilePage() {
         </div>
 
         <p className="text-xs text-slate-300 mt-3 leading-relaxed">
-          {completeness < 100
-            ? "Complete missing parameters such as family income and social category to unlock state scholarship quotas and subsidized MSME loans."
-            : "Your profile is 100% complete. All schemes across India are accurately evaluated for you."}
+          {site.profile.completenessHint}
         </p>
       </div>
 
@@ -153,7 +156,7 @@ function ProfilePage() {
         <form onSubmit={handleSaveProfile} className="space-y-6">
           <div className="border-b border-slate-100 pb-4">
             <h2 className="text-base font-bold text-slate-900">
-              Personal & Demographic Details
+              {site.profile.personalInfoTitle}
             </h2>
             <p className="text-xs text-slate-500">
               These details are used purely for rule matching against scheme eligibility guidelines.
@@ -164,7 +167,7 @@ function ProfilePage() {
             {/* Full Name */}
             <div>
               <label className="block font-bold text-slate-800 mb-1.5">
-                Full Name
+                {site.profile.fullNameLabel}
               </label>
               <input
                 type="text"
@@ -178,7 +181,7 @@ function ProfilePage() {
             {/* Age */}
             <div>
               <label className="block font-bold text-slate-800 mb-1.5">
-                Age (Years)
+                {site.profile.ageLabel}
               </label>
               <input
                 type="number"
@@ -194,37 +197,43 @@ function ProfilePage() {
             {/* State */}
             <div>
               <label className="block font-bold text-slate-800 mb-1.5">
-                State / Union Territory
+                {site.profile.stateLabel}
               </label>
               <select
                 value={state}
                 onChange={(e) => setState(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-900 text-slate-900 font-medium bg-white"
               >
-                <option value="">Select State</option>
-                <option value="Tamil Nadu">Tamil Nadu</option>
-                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Andhra Pradesh">Andhra Pradesh</option>
-                <option value="Telangana">Telangana</option>
-                <option value="Delhi">Delhi</option>
-                <option value="Gujarat">Gujarat</option>
-                <option value="West Bengal">West Bengal</option>
-                <option value="Rajasthan">Rajasthan</option>
-                <option value="Bihar">Bihar</option>
-                <option value="Madhya Pradesh">Madhya Pradesh</option>
-                <option value="Punjab">Punjab</option>
-                <option value="Haryana">Haryana</option>
-                <option value="Odisha">Odisha</option>
+                <option value="">{t.allStatesFilter}</option>
+                {[
+                  "Tamil Nadu",
+                  "Uttar Pradesh",
+                  "Maharashtra",
+                  "Karnataka",
+                  "Kerala",
+                  "Andhra Pradesh",
+                  "Telangana",
+                  "Delhi",
+                  "Gujarat",
+                  "West Bengal",
+                  "Rajasthan",
+                  "Bihar",
+                  "Madhya Pradesh",
+                  "Punjab",
+                  "Haryana",
+                  "Odisha",
+                ].map((st) => (
+                  <option key={st} value={st}>
+                    {getLocalizedState(st, language)}
+                  </option>
+                ))}
               </select>
             </div>
 
             {/* Occupation */}
             <div>
               <label className="block font-bold text-slate-800 mb-1.5">
-                Primary Occupation
+                {site.profile.occupationLabel}
               </label>
               <select
                 value={occupation}
@@ -248,7 +257,7 @@ function ProfilePage() {
             {/* Annual Family Income */}
             <div>
               <label className="block font-bold text-slate-800 mb-1.5">
-                Annual Family Income (₹)
+                {site.profile.incomeLabel}
               </label>
               <input
                 type="number"
@@ -265,7 +274,7 @@ function ProfilePage() {
             {/* Gender */}
             <div>
               <label className="block font-bold text-slate-800 mb-1.5">
-                Gender
+                {site.profile.genderLabel}
               </label>
               <select
                 value={gender}
@@ -282,7 +291,7 @@ function ProfilePage() {
             {/* Social Category */}
             <div>
               <label className="block font-bold text-slate-800 mb-1.5">
-                Social Category
+                {site.profile.categoryLabel}
               </label>
               <select
                 value={category}
@@ -301,7 +310,7 @@ function ProfilePage() {
             {/* Education */}
             <div>
               <label className="block font-bold text-slate-800 mb-1.5">
-                Highest Education
+                {site.profile.educationLabel}
               </label>
               <select
                 value={education}
@@ -320,7 +329,7 @@ function ProfilePage() {
             {/* Differently Abled (Divyangjan) */}
             <div>
               <label className="block font-bold text-slate-800 mb-1.5">
-                Differently Abled (Divyangjan)
+                {site.profile.disabilityLabel}
               </label>
               <div className="flex items-center space-x-4 pt-1.5">
                 <label className="flex items-center space-x-2 cursor-pointer font-medium text-slate-700">
@@ -331,7 +340,7 @@ function ProfilePage() {
                     onChange={() => setDisability(true)}
                     className="text-blue-900"
                   />
-                  <span>Yes</span>
+                  <span>{site.profile.disabilityYes}</span>
                 </label>
                 <label className="flex items-center space-x-2 cursor-pointer font-medium text-slate-700">
                   <input
@@ -341,7 +350,7 @@ function ProfilePage() {
                     onChange={() => setDisability(false)}
                     className="text-blue-900"
                   />
-                  <span>No</span>
+                  <span>{site.profile.disabilityNo}</span>
                 </label>
               </div>
             </div>
@@ -353,7 +362,7 @@ function ProfilePage() {
               className="px-6 py-2.5 rounded-xl bg-blue-950 hover:bg-blue-900 text-white font-black text-xs shadow-md transition-all flex items-center space-x-1.5"
             >
               <Save className="w-4 h-4" />
-              <span>Save & Update Profile</span>
+              <span>{site.profile.saveProfileBtn}</span>
             </button>
           </div>
         </form>
@@ -365,14 +374,14 @@ function ProfilePage() {
           <div className="flex items-center space-x-2">
             <Bookmark className="w-5 h-5 text-blue-900" />
             <h2 className="text-xl font-bold text-slate-900">
-              Saved Schemes ({bookmarkedSchemesList.length})
+              {site.profile.savedSchemesTitle} ({bookmarkedSchemesList.length})
             </h2>
           </div>
           <Link
             to="/explore"
             className="text-xs font-bold text-blue-900 hover:underline"
           >
-            Find more schemes →
+            {t.exploreSchemes} →
           </Link>
         </div>
 

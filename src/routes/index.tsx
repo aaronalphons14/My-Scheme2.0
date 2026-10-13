@@ -26,6 +26,8 @@ import { useSchemeStore } from "@/lib/store";
 import { matchScheme } from "@/lib/scheme-matching";
 import { SchemeCard } from "@/components/schemes/SchemeCard";
 import { startSpeechRecognition, isSpeechRecognitionSupported } from "@/lib/speech";
+import { getLocalizedCategory } from "@/lib/scheme-translations";
+import { getSiteText } from "@/lib/site-translations";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -34,6 +36,7 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const navigate = useNavigate();
   const { profile, updateProfile, t, language, openApplyModal } = useSchemeStore();
+  const site = getSiteText(language);
   const [heroSearch, setHeroSearch] = useState("");
   const [isListeningHero, setIsListeningHero] = useState(false);
 
@@ -116,7 +119,7 @@ function HomePage() {
           {/* Official Flag Accent Pill */}
           <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-semibold text-slate-200 mb-6 shadow-inner">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span>Official Government Discovery Portal · Digital India</span>
+            <span>{site.home.officialPill}</span>
           </div>
 
           {/* Main Headline */}
@@ -142,7 +145,7 @@ function HomePage() {
                 type="text"
                 value={heroSearch}
                 onChange={(e) => setHeroSearch(e.target.value)}
-                placeholder="Search schemes or describe what you need (e.g. 'Scholarship for college')..."
+                placeholder={site.home.searchPlaceholder}
                 className="w-full px-3 py-2 text-slate-900 text-xs sm:text-sm font-medium focus:outline-none placeholder:text-slate-400"
               />
 
@@ -166,7 +169,7 @@ function HomePage() {
                 type="submit"
                 className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-blue-950 hover:bg-blue-900 text-white font-extrabold text-xs sm:text-sm shadow-md transition-all flex items-center space-x-1.5 shrink-0"
               >
-                <span>Find Schemes</span>
+                <span>{site.home.findSchemesBtn}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
@@ -178,14 +181,14 @@ function HomePage() {
                 className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-extrabold text-xs sm:text-sm shadow-lg shadow-amber-500/25 hover:scale-102 transition-all"
               >
                 <Sparkles className="w-4 h-4 fill-slate-950" />
-                <span>{t.findSchemesForMe} (AI Assistant)</span>
+                <span>{site.home.aiAssistantBtn}</span>
               </Link>
 
               <Link
                 to="/explore"
                 className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm backdrop-blur-md border border-white/10 transition-colors"
               >
-                <span>Browse All 24 Schemes</span>
+                <span>{site.home.browseAllSchemes}</span>
                 <ChevronRight className="w-4 h-4 text-slate-300" />
               </Link>
             </div>
@@ -195,19 +198,19 @@ function HomePage() {
           <div className="mt-12 pt-8 border-t border-white/10 max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div>
               <div className="text-xl sm:text-2xl font-black text-amber-300">2,000+</div>
-              <div className="text-[11px] text-slate-300 font-medium">Verified Schemes</div>
+              <div className="text-[11px] text-slate-300 font-medium">{site.home.verifiedSchemes}</div>
             </div>
             <div>
               <div className="text-xl sm:text-2xl font-black text-emerald-300">₹1.4 Lakh Cr+</div>
-              <div className="text-[11px] text-slate-300 font-medium">Benefits Disbursed</div>
+              <div className="text-[11px] text-slate-300 font-medium">{site.home.benefitsDisbursed}</div>
             </div>
             <div>
               <div className="text-xl sm:text-2xl font-black text-blue-200">6 Languages</div>
-              <div className="text-[11px] text-slate-300 font-medium">Native Regional Support</div>
+              <div className="text-[11px] text-slate-300 font-medium">{site.home.regionalSupport}</div>
             </div>
             <div>
               <div className="text-xl sm:text-2xl font-black text-purple-200">100% Free</div>
-              <div className="text-[11px] text-slate-300 font-medium">No Middlemen, Direct DBT</div>
+              <div className="text-[11px] text-slate-300 font-medium">{site.home.directDbt}</div>
             </div>
           </div>
         </div>
@@ -217,7 +220,7 @@ function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-xl mx-auto mb-10">
           <div className="text-xs font-bold text-blue-900 uppercase tracking-wider">
-            Simple 4-Step Journey
+            {site.home.journeyBadge}
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
             {t.howItWorksTitle}
@@ -286,10 +289,10 @@ function HomePage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <div className="text-xs font-bold text-blue-900 uppercase tracking-wider">
-              Explore by Sector
+              {site.home.exploreBySector}
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
-              Browse Schemes by Category
+              {site.home.browseByCategory}
             </h2>
           </div>
 
@@ -307,6 +310,7 @@ function HomePage() {
             const Icon = categoryIcons[cat];
             const count = schemes.filter((s) => s.category === cat).length;
             const gradient = categoryGradients[cat];
+            const localizedCat = getLocalizedCategory(cat, language);
 
             return (
               <Link
@@ -323,15 +327,15 @@ function HomePage() {
 
                 <div>
                   <h3 className="text-xs font-bold text-slate-900 group-hover:text-blue-900 transition-colors">
-                    {cat}
+                    {localizedCat}
                   </h3>
                   <p className="text-[11px] font-semibold text-slate-500 mt-0.5">
-                    {count} Schemes
+                    {count} {site.home.schemesCountSuffix}
                   </p>
                 </div>
 
                 <div className="mt-3 text-[10px] font-bold text-blue-900 flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span>Explore</span>
+                  <span>{site.home.exploreAction}</span>
                   <ArrowRight className="w-2.5 h-2.5" />
                 </div>
               </Link>
@@ -346,13 +350,13 @@ function HomePage() {
           <div>
             <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 text-xs font-bold mb-1.5">
               <Sparkles className="w-3 h-3 text-amber-500" />
-              <span>Personalized Matches</span>
+              <span>{site.home.personalizedMatchesBadge}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
               {t.recommendedForYou}
             </h2>
             <p className="text-xs text-slate-500 mt-1">
-              Curated based on your age ({profile.age ?? 20} yrs), {profile.state || "State"}, and {profile.occupation || "occupation"}.
+              {site.home.curatedForYouSub} ({profile.age ?? 20} yrs, {profile.state || "State"}).
             </p>
           </div>
 
@@ -361,14 +365,14 @@ function HomePage() {
               to="/profile"
               className="text-xs font-bold px-3 py-2 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 transition-colors"
             >
-              Update Profile
+              {site.home.updateProfileBtn}
             </Link>
             <Link
               to="/finder"
               className="text-xs font-bold px-3 py-2 rounded-xl bg-blue-950 text-white hover:bg-blue-900 transition-colors flex items-center space-x-1"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>AI Chat Matcher</span>
+              <span>{site.home.aiChatMatcherBtn}</span>
             </Link>
           </div>
         </div>
@@ -408,7 +412,7 @@ function HomePage() {
             <div>
               <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 text-xs font-bold mb-1.5">
                 <Clock className="w-3 h-3 text-red-600 animate-pulse" />
-                <span>Urgent Windows</span>
+                <span>{site.home.urgentWindowsBadge}</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
                 {t.closingSoon}
@@ -423,7 +427,7 @@ function HomePage() {
               search={{ sort: "deadline" } as any}
               className="text-xs font-bold text-amber-900 hover:underline flex items-center space-x-1"
             >
-              <span>View All Closing Soon</span>
+              <span>{site.home.viewAllClosingSoon}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -444,10 +448,10 @@ function HomePage() {
               Conversational AI Engine
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight mt-3">
-              Unsure Which Scheme You Qualify For?
+              {site.home.unsureHeading}
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
-              Just talk to our Smart Scheme Finder in your own words. It evaluates your eligibility instantly and explains unmet conditions in plain language.
+              {site.home.unsureSub}
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
@@ -456,14 +460,14 @@ function HomePage() {
                 className="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-400/20 transition-all flex items-center space-x-2"
               >
                 <Sparkles className="w-4 h-4 fill-slate-950" />
-                <span>Launch Smart Scheme Finder</span>
+                <span>{site.home.launchFinderBtn}</span>
               </Link>
 
               <Link
                 to="/documents"
                 className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm border border-white/15 transition-all"
               >
-                Check Document Readiness
+                {site.home.checkDocsBtn}
               </Link>
             </div>
           </div>
