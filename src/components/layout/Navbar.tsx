@@ -15,12 +15,12 @@ import {
   CheckCircle2,
   AlertCircle,
   Eye,
-  SlidersHorizontal,
   Home,
   Compass,
   ArrowRight,
-  ShieldCheck,
   Scale,
+  ChevronDown,
+  User,
 } from "lucide-react";
 import { useSchemeStore } from "@/lib/store";
 import type { LanguageCode } from "@/lib/types";
@@ -45,12 +45,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
     unreadCount,
     notifications,
     markNotificationRead,
-    a11y,
   } = useSchemeStore();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
+  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [isSpeakingNav, setIsSpeakingNav] = useState(false);
 
   const languages: { code: LanguageCode; label: string; native: string }[] = [
@@ -103,29 +104,29 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
       {/* Top Official Government of India Header Stripe */}
       <div className="bg-slate-900 text-slate-100 text-xs border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 shrink-0">
             {/* Indian Tricolor subtle flag accent */}
-            <div className="flex h-3 w-5 overflow-hidden rounded-xs border border-white/20 shadow-xs" aria-hidden="true">
+            <div className="flex h-3 w-5 overflow-hidden rounded-xs border border-white/20 shadow-xs shrink-0" aria-hidden="true">
               <span className="w-1/3 bg-[#FF9933] h-full" />
               <span className="w-1/3 bg-white h-full relative">
                 <span className="absolute inset-0 m-auto w-1 h-1 rounded-full bg-[#000080]" />
               </span>
               <span className="w-1/3 bg-[#138808] h-full" />
             </div>
-            <span className="font-medium text-slate-200">
+            <span className="font-medium text-slate-200 whitespace-nowrap">
               भारत सरकार | Government of India
             </span>
             <span className="hidden md:inline-block text-slate-400">·</span>
-            <span className="hidden md:inline-block text-slate-400">
+            <span className="hidden md:inline-block text-slate-400 truncate max-w-[200px] lg:max-w-none">
               {t.nationalPortal}
             </span>
           </div>
 
-          <div className="flex items-center space-x-3 text-xs">
+          <div className="flex items-center space-x-2 sm:space-x-3 text-xs shrink-0">
             {/* Text to Speech Read Out */}
             <button
               onClick={toggleSpeakHeader}
-              className="hidden sm:inline-flex items-center space-x-1 text-slate-300 hover:text-white transition-colors"
+              className="hidden sm:inline-flex items-center space-x-1 text-slate-300 hover:text-white transition-colors whitespace-nowrap cursor-pointer"
               aria-label={isSpeakingNav ? "Stop reading" : "Read page summary aloud"}
             >
               {isSpeakingNav ? <VolumeX className="w-3.5 h-3.5 text-amber-400 animate-pulse" /> : <Volume2 className="w-3.5 h-3.5" />}
@@ -135,7 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
             {/* Accessibility Settings Trigger */}
             <button
               onClick={onOpenA11y}
-              className="inline-flex items-center space-x-1 text-slate-300 hover:text-white px-2 py-0.5 rounded-sm hover:bg-slate-800 transition-colors"
+              className="inline-flex items-center space-x-1 text-slate-300 hover:text-white px-2 py-0.5 rounded-sm hover:bg-slate-800 transition-colors whitespace-nowrap cursor-pointer"
               aria-label="Open accessibility preferences"
             >
               <Eye className="w-3.5 h-3.5 text-amber-400" />
@@ -146,13 +147,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
             <div className="relative">
               <button
                 onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                className="inline-flex items-center space-x-1 text-slate-200 hover:text-white px-2 py-0.5 rounded-sm hover:bg-slate-800 transition-colors"
+                className="inline-flex items-center space-x-1 text-slate-200 hover:text-white px-2 py-0.5 rounded-sm hover:bg-slate-800 transition-colors whitespace-nowrap cursor-pointer"
                 aria-expanded={langDropdownOpen}
                 aria-haspopup="true"
               >
                 <Globe className="w-3.5 h-3.5 text-blue-400" />
                 <span className="font-semibold uppercase tracking-wider text-[11px]">{language}</span>
-                <span className="text-slate-400">({languages.find((l) => l.code === language)?.native})</span>
+                <span className="hidden sm:inline text-slate-400">({languages.find((l) => l.code === language)?.native})</span>
               </button>
 
               {langDropdownOpen && (
@@ -172,7 +173,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                           setLanguage(item.code);
                           setLangDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-blue-50 transition-colors ${
+                        className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-blue-50 transition-colors cursor-pointer ${
                           language === item.code ? "bg-blue-50/80 font-bold text-blue-900" : "text-slate-700"
                         }`}
                       >
@@ -189,152 +190,188 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
       </div>
 
       {/* Main Sticky Navbar */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-18">
-            {/* Logo and Emblem */}
-            <Link to="/" className="flex items-center space-x-3 group">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-950 text-white flex items-center justify-center shadow-md shadow-blue-950/15 group-hover:scale-105 transition-transform">
-                {/* Ashoka Chakra / Dharma Emblem Graphic */}
-                <svg className="w-6 h-6 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M12 3v18" />
-                  <path d="M3 12h18" />
-                  <path d="m5.6 5.6 12.8 12.8" />
-                  <path d="m18.4 5.6-12.8 12.8" />
-                  <circle cx="12" cy="12" r="2.5" fill="currentColor" />
-                </svg>
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center space-x-1.5">
-                  <span className="text-xl font-extrabold tracking-tight text-blue-950 group-hover:text-blue-900 transition-colors">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-2xs w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-16 sm:h-[68px] gap-3 sm:gap-4 w-full">
+            
+            {/* Left Section: Brand & Desktop Navigation Group */}
+            <div className="flex items-center space-x-3 sm:space-x-4 lg:space-x-6 shrink-0">
+              {/* Brand & Logo */}
+              <Link to="/" className="flex items-center space-x-2 sm:space-x-2.5 shrink-0 group">
+                <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-950 text-white flex items-center justify-center shadow-md shadow-blue-950/15 group-hover:scale-105 transition-transform shrink-0">
+                  {/* Ashoka Chakra / Dharma Emblem Graphic */}
+                  <svg className="w-5 h-5 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 3v18" />
+                    <path d="M3 12h18" />
+                    <path d="m5.6 5.6 12.8 12.8" />
+                    <path d="m18.4 5.6-12.8 12.8" />
+                    <circle cx="12" cy="12" r="2.5" fill="currentColor" />
+                  </svg>
+                </div>
+
+                <div className="flex items-center space-x-1.5 shrink-0">
+                  <span className="text-base sm:text-lg font-black tracking-tight text-blue-950 group-hover:text-blue-900 transition-colors leading-none">
                     {t.portalName}
                   </span>
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[10px] font-semibold bg-blue-100 text-blue-900">
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs text-[9px] font-bold bg-blue-100 text-blue-900 leading-none">
                     Official
                   </span>
                 </div>
-                <span className="text-[11px] font-medium text-slate-500 leading-tight">
-                  {t.portalSubtitle}
-                </span>
-              </div>
-            </Link>
-
-            {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center space-x-1 font-medium text-sm text-slate-700">
-              <Link
-                to="/"
-                className={`px-3 py-2 rounded-md transition-colors ${
-                  currentPath === "/"
-                    ? "text-blue-900 bg-blue-50/80 font-bold"
-                    : "hover:text-blue-900 hover:bg-slate-100"
-                }`}
-              >
-                {t.home}
               </Link>
 
-              <Link
-                to="/explore"
-                className={`px-3 py-2 rounded-md transition-colors ${
-                  currentPath.startsWith("/explore")
-                    ? "text-blue-900 bg-blue-50/80 font-bold"
-                    : "hover:text-blue-900 hover:bg-slate-100"
-                }`}
-              >
-                {t.exploreSchemes}
-              </Link>
+              {/* Desktop Navigation Links */}
+              <nav className="hidden lg:flex items-center space-x-1 xl:space-x-1.5 font-medium text-xs xl:text-sm text-slate-700 shrink-0">
+                <Link
+                  to="/explore"
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors ${
+                    currentPath.startsWith("/explore")
+                      ? "text-blue-950 bg-blue-50/90 font-bold border border-blue-100/60 shadow-2xs"
+                      : "hover:text-blue-950 hover:bg-slate-100/80"
+                  }`}
+                >
+                  Explore
+                </Link>
 
-              <Link
-                to="/finder"
-                className={`relative px-3 py-2 rounded-md transition-colors flex items-center space-x-1.5 ${
-                  currentPath.startsWith("/finder")
-                    ? "text-blue-900 bg-blue-50/80 font-bold"
-                    : "hover:text-blue-900 hover:bg-slate-100"
-                }`}
-              >
-                <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
-                <span>{t.smartFinder}</span>
-                <span className="ml-1 text-[10px] font-extrabold px-1.5 py-0.2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white uppercase tracking-wider">
-                  AI
-                </span>
-              </Link>
-
-              <Link
-                to="/compare"
-                className={`relative px-3 py-2 rounded-md transition-colors flex items-center space-x-1 ${
-                  currentPath.startsWith("/compare")
-                    ? "text-blue-900 bg-blue-50/80 font-bold"
-                    : "hover:text-blue-900 hover:bg-slate-100"
-                }`}
-              >
-                <Scale className="w-4 h-4 text-slate-500" />
-                <span>{t.compare}</span>
-                {comparedSchemes.length > 0 && (
-                  <span className="w-4 h-4 rounded-full bg-blue-700 text-white text-[10px] flex items-center justify-center font-bold">
-                    {comparedSchemes.length}
+                <Link
+                  to="/finder"
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-1.5 ${
+                    currentPath.startsWith("/finder")
+                      ? "text-blue-950 bg-blue-50/90 font-bold border border-blue-100/60 shadow-2xs"
+                      : "hover:text-blue-950 hover:bg-slate-100/80"
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse shrink-0" />
+                  <span>AI Finder</span>
+                  <span className="text-[9px] font-black px-1.5 py-0.2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white uppercase tracking-wider leading-none">
+                    AI
                   </span>
-                )}
-              </Link>
+                </Link>
 
-              <Link
-                to="/documents"
-                className={`px-3 py-2 rounded-md transition-colors ${
-                  currentPath.startsWith("/documents")
-                    ? "text-blue-900 bg-blue-50/80 font-bold"
-                    : "hover:text-blue-900 hover:bg-slate-100"
-                }`}
-              >
-                {t.myDocuments}
-              </Link>
+                <Link
+                  to="/compare"
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-1.5 ${
+                    currentPath.startsWith("/compare")
+                      ? "text-blue-950 bg-blue-50/90 font-bold border border-blue-100/60 shadow-2xs"
+                      : "hover:text-blue-950 hover:bg-slate-100/80"
+                  }`}
+                >
+                  <Scale className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                  <span>Compare</span>
+                  {comparedSchemes.length > 0 && (
+                    <span className="w-4 h-4 rounded-full bg-blue-700 text-white text-[10px] flex items-center justify-center font-bold">
+                      {comparedSchemes.length}
+                    </span>
+                  )}
+                </Link>
 
-              <Link
-                to="/applications"
-                className={`px-3 py-2 rounded-md transition-colors ${
-                  currentPath.startsWith("/applications")
-                    ? "text-blue-900 bg-blue-50/80 font-bold"
-                    : "hover:text-blue-900 hover:bg-slate-100"
-                }`}
-              >
-                {t.myApplications}
-              </Link>
+                {/* Citizen Services Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setServicesDropdownOpen(!servicesDropdownOpen)}
+                    className={`px-2.5 xl:px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-1 cursor-pointer ${
+                      currentPath.startsWith("/documents") ||
+                      currentPath.startsWith("/applications") ||
+                      currentPath.startsWith("/help")
+                        ? "text-blue-950 bg-blue-50/90 font-bold border border-blue-100/60"
+                        : "hover:text-blue-950 hover:bg-slate-100/80"
+                    }`}
+                    aria-expanded={servicesDropdownOpen}
+                  >
+                    <span>Services</span>
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-200 ${
+                        servicesDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
 
-              <Link
-                to="/help"
-                className={`px-3 py-2 rounded-md transition-colors ${
-                  currentPath.startsWith("/help")
-                    ? "text-blue-900 bg-blue-50/80 font-bold"
-                    : "hover:text-blue-900 hover:bg-slate-100"
-                }`}
-              >
-                {t.help}
-              </Link>
-            </nav>
+                  {servicesDropdownOpen && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setServicesDropdownOpen(false)}
+                      />
+                      <div className="absolute left-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs animate-in fade-in slide-in-from-top-2 duration-150">
+                        <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                          Citizen Tools
+                        </div>
+                        <Link
+                          to="/documents"
+                          onClick={() => setServicesDropdownOpen(false)}
+                          className={`flex items-center space-x-2.5 px-3 py-2 hover:bg-slate-50 transition-colors ${
+                            currentPath.startsWith("/documents") ? "bg-blue-50 text-blue-950 font-bold" : "text-slate-700"
+                          }`}
+                        >
+                          <FileText className="w-4 h-4 text-blue-900 shrink-0" />
+                          <span>{t.myDocuments}</span>
+                        </Link>
+                        <Link
+                          to="/applications"
+                          onClick={() => setServicesDropdownOpen(false)}
+                          className={`flex items-center space-x-2.5 px-3 py-2 hover:bg-slate-50 transition-colors ${
+                            currentPath.startsWith("/applications") ? "bg-blue-50 text-blue-950 font-bold" : "text-slate-700"
+                          }`}
+                        >
+                          <Clock className="w-4 h-4 text-blue-900 shrink-0" />
+                          <span>{t.myApplications}</span>
+                        </Link>
+                        <Link
+                          to="/help"
+                          onClick={() => setServicesDropdownOpen(false)}
+                          className={`flex items-center space-x-2.5 px-3 py-2 hover:bg-slate-50 transition-colors ${
+                            currentPath.startsWith("/help") ? "bg-blue-50 text-blue-950 font-bold" : "text-slate-700"
+                          }`}
+                        >
+                          <HelpCircle className="w-4 h-4 text-blue-900 shrink-0" />
+                          <span>{t.help}</span>
+                        </Link>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </nav>
+            </div>
 
-            {/* Right Icons: Search, Notifications, Profile */}
-            <div className="flex items-center space-x-2">
+            {/* Right Section: Search Trigger, Notifications, Profile, Mobile Menu */}
+            <div className="flex items-center space-x-1.5 sm:space-x-2 xl:space-x-3 shrink-0">
               {/* Quick Search Button */}
               <button
                 onClick={onOpenSearch}
-                className="flex items-center space-x-2 px-3 py-2 rounded-lg text-slate-500 hover:text-slate-800 bg-slate-100/80 hover:bg-slate-200/70 border border-slate-200 text-xs transition-colors"
+                className="hidden sm:flex items-center justify-between w-28 sm:w-32 px-2.5 py-1.5 rounded-lg text-slate-500 hover:text-slate-800 bg-slate-100/90 hover:bg-slate-200/70 border border-slate-200 text-xs transition-colors shrink-0 cursor-pointer"
                 aria-label="Search schemes"
               >
-                <Search className="w-4 h-4 text-blue-900" />
-                <span className="hidden sm:inline-block font-medium">Search...</span>
-                <kbd className="hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-white rounded-sm border border-slate-300 text-slate-400">
+                <div className="flex items-center space-x-1.5 min-w-0">
+                  <Search className="w-3.5 h-3.5 text-blue-900 shrink-0" />
+                  <span className="font-medium truncate">Search...</span>
+                </div>
+                <kbd className="hidden lg:inline-block px-1 py-0.5 text-[9px] font-mono bg-white rounded-sm border border-slate-300 text-slate-400 shrink-0">
                   Ctrl K
                 </kbd>
               </button>
 
+              {/* Mobile/Compact Search Icon Button */}
+              <button
+                onClick={onOpenSearch}
+                className="sm:hidden p-2 rounded-lg text-slate-600 hover:text-blue-950 hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
+                aria-label="Search schemes"
+              >
+                <Search className="w-5 h-5 text-blue-900" />
+              </button>
+
+              {/* Subtle vertical separator */}
+              <div className="hidden sm:block h-5 w-px bg-slate-200 shrink-0" />
+
               {/* Notifications Dropdown */}
-              <div className="relative">
+              <div className="relative shrink-0">
                 <button
                   onClick={() => setNotifDropdownOpen(!notifDropdownOpen)}
-                  className="relative p-2 rounded-lg text-slate-600 hover:text-blue-950 hover:bg-slate-100 transition-colors"
+                  className="relative p-2 rounded-lg text-slate-600 hover:text-blue-950 hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
                   aria-label="View notifications"
                 >
                   <Clock className="w-5 h-5" />
                   {unreadCount > 0 && (
-                    <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-red-600 ring-2 ring-white animate-pulse" />
+                    <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-600 ring-2 ring-white animate-pulse" />
                   )}
                 </button>
 
@@ -344,7 +381,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                       className="fixed inset-0 z-40"
                       onClick={() => setNotifDropdownOpen(false)}
                     />
-                    <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                    <div className="absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-2rem)] bg-white rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                       <div className="px-4 py-2 border-b border-slate-100 flex items-center justify-between">
                         <span className="font-bold text-sm text-slate-900">
                           Notifications & Alerts
@@ -388,44 +425,128 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                 )}
               </div>
 
-              {/* Profile Avatar / Menu */}
-              <Link
-                to="/profile"
-                className="flex items-center space-x-2 p-1.5 rounded-lg hover:bg-slate-100 transition-colors group"
-                aria-label="View user profile"
-              >
-                <div className="relative w-8 h-8 rounded-full bg-blue-950 text-white flex items-center justify-center font-bold text-xs ring-2 ring-blue-900/20 shadow-xs">
-                  {profile.name ? profile.name.charAt(0).toUpperCase() : "U"}
-                  {/* Completeness Badge Indicator */}
-                  <span
-                    className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${
-                      profileCompleteness >= 80
-                        ? "bg-emerald-500"
-                        : profileCompleteness >= 40
-                          ? "bg-amber-500"
-                          : "bg-red-400"
+              {/* Profile Avatar & Interactive Menu Dropdown */}
+              <div className="relative shrink-0">
+                <button
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  className="flex items-center space-x-1.5 sm:space-x-2 p-1 rounded-lg hover:bg-slate-100 transition-colors group shrink-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-900/20"
+                  aria-label="User profile menu"
+                  aria-expanded={profileDropdownOpen}
+                >
+                  <div className="relative w-8 h-8 rounded-full bg-gradient-to-tr from-blue-950 to-blue-800 text-white flex items-center justify-center font-bold text-xs ring-2 ring-blue-900/20 shadow-xs shrink-0">
+                    {profile.name ? profile.name.charAt(0).toUpperCase() : "U"}
+                    {/* Completeness Badge Indicator */}
+                    <span
+                      className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${
+                        profileCompleteness >= 80
+                          ? "bg-emerald-500"
+                          : profileCompleteness >= 40
+                            ? "bg-amber-500"
+                            : "bg-red-400"
+                      }`}
+                      title={`Profile ${profileCompleteness}% complete`}
+                    />
+                  </div>
+
+                  {/* Profile name only visible on wide screens (2xl+) so it never squeezes standard laptops */}
+                  <div className="hidden 2xl:flex flex-col text-left max-w-[110px] min-w-0">
+                    <span className="text-xs font-bold text-slate-900 truncate">
+                      {profile.name || "Citizen User"}
+                    </span>
+                    <span className="text-[10px] text-slate-500 truncate">
+                      {profileCompleteness}% Profile
+                    </span>
+                  </div>
+
+                  <ChevronDown
+                    className={`hidden sm:block w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-transform duration-200 ${
+                      profileDropdownOpen ? "rotate-180" : ""
                     }`}
-                    title={`Profile ${profileCompleteness}% complete`}
                   />
-                </div>
-                <div className="hidden xl:flex flex-col text-left">
-                  <span className="text-xs font-bold text-slate-900 line-clamp-1">
-                    {profile.name || "Citizen User"}
-                  </span>
-                  <span className="text-[10px] text-slate-500">
-                    {profileCompleteness}% Profile
-                  </span>
-                </div>
-              </Link>
+                </button>
+
+                {profileDropdownOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setProfileDropdownOpen(false)}
+                    />
+                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                      {/* User Header */}
+                      <div className="px-4 py-3 border-b border-slate-100 flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-full bg-blue-950 text-white flex items-center justify-center font-bold text-sm shrink-0">
+                          {profile.name ? profile.name.charAt(0).toUpperCase() : "U"}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-xs font-bold text-slate-900 truncate">
+                            {profile.name || "Citizen User"}
+                          </div>
+                          <div className="text-[11px] text-slate-500 truncate">
+                            {profile.state || "State not set"} · {profile.occupation || "Citizen"}
+                          </div>
+                          {/* Completeness Bar */}
+                          <div className="mt-2 flex items-center space-x-2">
+                            <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-emerald-500 rounded-full"
+                                style={{ width: `${profileCompleteness}%` }}
+                              />
+                            </div>
+                            <span className="text-[10px] font-semibold text-slate-600 shrink-0">
+                              {profileCompleteness}%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Dropdown Menu Links */}
+                      <div className="py-1 text-xs">
+                        <Link
+                          to="/profile"
+                          onClick={() => setProfileDropdownOpen(false)}
+                          className="flex items-center space-x-2.5 px-4 py-2 hover:bg-slate-50 text-slate-700 font-medium transition-colors"
+                        >
+                          <User className="w-4 h-4 text-blue-900 shrink-0" />
+                          <span>View Full Profile</span>
+                        </Link>
+                        <Link
+                          to="/documents"
+                          onClick={() => setProfileDropdownOpen(false)}
+                          className="flex items-center space-x-2.5 px-4 py-2 hover:bg-slate-50 text-slate-700 font-medium transition-colors"
+                        >
+                          <FileText className="w-4 h-4 text-blue-900 shrink-0" />
+                          <span>Document Locker</span>
+                        </Link>
+                        <Link
+                          to="/applications"
+                          onClick={() => setProfileDropdownOpen(false)}
+                          className="flex items-center space-x-2.5 px-4 py-2 hover:bg-slate-50 text-slate-700 font-medium transition-colors"
+                        >
+                          <Clock className="w-4 h-4 text-blue-900 shrink-0" />
+                          <span>Track Applications</span>
+                        </Link>
+                        <Link
+                          to="/profile"
+                          onClick={() => setProfileDropdownOpen(false)}
+                          className="flex items-center space-x-2.5 px-4 py-2 hover:bg-slate-50 text-slate-700 font-medium transition-colors"
+                        >
+                          <Bookmark className="w-4 h-4 text-blue-900 shrink-0" />
+                          <span>Saved Schemes ({savedSchemes.length})</span>
+                        </Link>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
 
               {/* Mobile Menu Hamburger */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 rounded-lg text-slate-700 hover:text-slate-950 hover:bg-slate-100 transition-colors"
+                className="lg:hidden p-2 rounded-lg text-slate-700 hover:text-slate-950 hover:bg-slate-100 transition-colors shrink-0 cursor-pointer"
                 aria-label="Toggle mobile menu"
                 aria-expanded={mobileMenuOpen}
               >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {mobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
               </button>
             </div>
           </div>

@@ -158,7 +158,7 @@ function MainLayout() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen w-full overflow-x-hidden">
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenA11y={() => setIsA11yOpen(true)}
