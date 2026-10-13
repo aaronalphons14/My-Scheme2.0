@@ -20,6 +20,12 @@ import { schemes, categories, type SchemeCategory, type Scheme } from "@/data/sc
 import { useSchemeStore } from "@/lib/store";
 import { matchScheme } from "@/lib/scheme-matching";
 import { SchemeCard } from "@/components/schemes/SchemeCard";
+import {
+  getLocalizedScheme,
+  getLocalizedCategory,
+  getLocalizedBeneficiary,
+  getLocalizedState,
+} from "@/lib/scheme-translations";
 
 type ExploreSearchParams = {
   q?: string;
@@ -33,12 +39,12 @@ type ExploreSearchParams = {
 export const Route = createFileRoute("/explore")({
   validateSearch: (search: Record<string, unknown>): ExploreSearchParams => {
     return {
-      q: (search.q as string) || "",
-      category: (search.category as SchemeCategory | "All") || "All",
-      scope: (search.scope as "All" | "Central" | "State") || "All",
-      state: (search.state as string) || "All",
-      beneficiary: (search.beneficiary as string) || "All",
-      sort: (search.sort as "match" | "benefit" | "deadline" | "name") || "match",
+      q: (search["q"] as string) || "",
+      category: (search["category"] as SchemeCategory | "All") || "All",
+      scope: (search["scope"] as "All" | "Central" | "State") || "All",
+      state: (search["state"] as string) || "All",
+      beneficiary: (search["beneficiary"] as string) || "All",
+      sort: (search["sort"] as "match" | "benefit" | "deadline" | "name") || "match",
     };
   },
   component: ExploreSchemesPage,
@@ -46,7 +52,7 @@ export const Route = createFileRoute("/explore")({
 
 function ExploreSchemesPage() {
   const searchParams = useSearch({ from: "/explore" });
-  const { profile, t } = useSchemeStore();
+  const { profile, t, language } = useSchemeStore();
 
   const [searchQuery, setSearchQuery] = useState(searchParams.q || "");
   const [selectedCategory, setSelectedCategory] = useState<SchemeCategory | "All">(
@@ -70,10 +76,11 @@ function ExploreSchemesPage() {
       // Keyword
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
-        const matchesName = s.name.toLowerCase().includes(q);
-        const matchesSummary = s.summary.toLowerCase().includes(q);
-        const matchesDept = s.department.toLowerCase().includes(q);
-        const matchesTags = s.tags?.some((t) => t.toLowerCase().includes(q));
+        const loc = getLocalizedScheme(s, language);
+        const matchesName = s.name.toLowerCase().includes(q) || loc.name.toLowerCase().includes(q);
+        const matchesSummary = s.summary.toLowerCase().includes(q) || loc.summary.toLowerCase().includes(q);
+        const matchesDept = s.department.toLowerCase().includes(q) || loc.department.toLowerCase().includes(q);
+        const matchesTags = s.tags?.some((tag) => tag.toLowerCase().includes(q));
         if (!matchesName && !matchesSummary && !matchesDept && !matchesTags) return false;
       }
 
@@ -103,7 +110,7 @@ function ExploreSchemesPage() {
 
       return true;
     });
-  }, [searchQuery, selectedCategory, selectedScope, selectedState, selectedBeneficiary]);
+  }, [searchQuery, selectedCategory, selectedScope, selectedState, selectedBeneficiary, language]);
 
   // Sort
   const sortedSchemes = useMemo(() => {
@@ -120,11 +127,13 @@ function ExploreSchemesPage() {
         return (a.deadlineDays ?? 999) - (b.deadlineDays ?? 999);
       }
       if (sortBy === "name") {
-        return a.name.localeCompare(b.name);
+        const locA = getLocalizedScheme(a, language).name;
+        const locB = getLocalizedScheme(b, language).name;
+        return locA.localeCompare(locB);
       }
       return 0;
     });
-  }, [filteredSchemes, sortBy, profile]);
+  }, [filteredSchemes, sortBy, profile, language]);
 
   const totalPages = Math.ceil(sortedSchemes.length / pageSize) || 1;
   const paginatedSchemes = sortedSchemes.slice(
@@ -171,13 +180,13 @@ function ExploreSchemesPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
         <div>
           <div className="text-xs font-bold text-blue-900 uppercase tracking-wider">
-            National Catalog
+            {t.nationalCatalog}
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">
-            Explore Government Schemes
+            {t.exploreSchemes}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Browse 24 verified Central & State initiatives across Education, Agriculture, Housing & Welfare.
+            {t.exploreCatalogSubline}
           </p>
         </div>
 
@@ -191,10 +200,10 @@ function ExploreSchemesPage() {
               onChange={(e) => setSortBy(e.target.value as any)}
               className="bg-transparent text-xs font-bold text-slate-800 focus:outline-none cursor-pointer"
             >
-              <option value="match">Sort: Highest Match %</option>
-              <option value="benefit">Sort: Highest Benefit</option>
-              <option value="deadline">Sort: Closing Soonest</option>
-              <option value="name">Sort: Name (A-Z)</option>
+              <option value="match">{t.sortHighestMatch}</option>
+              <option value="benefit">{t.sortHighestBenefit}</option>
+              <option value="deadline">{t.sortClosingSoonest}</option>
+              <option value="name">{t.sortName}</option>
             </select>
           </div>
 
@@ -236,7 +245,7 @@ function ExploreSchemesPage() {
               setSearchQuery(e.target.value);
               setCurrentPage(1);
             }}
-            placeholder="Search by keywords (e.g. 'Scholarship', 'PM-KISAN', 'Subsidy', 'Rooftop Solar')..."
+            placeholder={t.searchPlaceholder}
             className="w-full pl-11 pr-10 py-3 rounded-2xl bg-white border border-slate-200 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-900 shadow-xs placeholder:text-slate-400"
           />
           {searchQuery && (
@@ -262,7 +271,7 @@ function ExploreSchemesPage() {
                 : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
             }`}
           >
-            All Categories ({schemes.length})
+            {t.allCategories} ({schemes.length})
           </button>
 
           {categories.map((cat) => {
@@ -281,7 +290,7 @@ function ExploreSchemesPage() {
                     : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
                 }`}
               >
-                {cat} ({count})
+                {getLocalizedCategory(cat, language)} ({count})
               </button>
             );
           })}
@@ -295,21 +304,21 @@ function ExploreSchemesPage() {
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <span className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
               <SlidersHorizontal className="w-3.5 h-3.5 text-blue-900" />
-              <span>Filters</span>
+              <span>{t.filters}</span>
             </span>
             <button
               onClick={resetFilters}
               className="text-[11px] font-bold text-slate-500 hover:text-blue-900 flex items-center space-x-1"
             >
               <RotateCcw className="w-3 h-3" />
-              <span>Reset</span>
+              <span>{t.reset}</span>
             </button>
           </div>
 
           {/* Scope: Central vs State */}
           <div>
             <label className="block text-xs font-bold text-slate-800 mb-2">
-              Government Level
+              {t.govtLevel}
             </label>
             <div className="grid grid-cols-3 gap-1.5 text-xs font-medium">
               {(["All", "Central", "State"] as const).map((sc) => (
@@ -325,7 +334,7 @@ function ExploreSchemesPage() {
                       : "border-slate-200 text-slate-600 hover:bg-slate-50"
                   }`}
                 >
-                  {sc}
+                  {sc === "All" ? t.all : sc === "Central" ? t.central : t.state}
                 </button>
               ))}
             </div>
@@ -334,7 +343,7 @@ function ExploreSchemesPage() {
           {/* State Filter */}
           <div>
             <label className="block text-xs font-bold text-slate-800 mb-2">
-              State / Union Territory
+              {t.stateOrUt}
             </label>
             <select
               value={selectedState}
@@ -346,7 +355,7 @@ function ExploreSchemesPage() {
             >
               {statesList.map((st) => (
                 <option key={st} value={st}>
-                  {st === "All" ? "All States (Central & Pan-India)" : st}
+                  {st === "All" ? t.allStatesFilter : getLocalizedState(st, language)}
                 </option>
               ))}
             </select>
@@ -355,7 +364,7 @@ function ExploreSchemesPage() {
           {/* Beneficiary Type */}
           <div>
             <label className="block text-xs font-bold text-slate-800 mb-2">
-              Beneficiary Type
+              {t.beneficiaryType}
             </label>
             <select
               value={selectedBeneficiary}
@@ -367,7 +376,7 @@ function ExploreSchemesPage() {
             >
               {beneficiariesList.map((ben) => (
                 <option key={ben} value={ben}>
-                  {ben === "All" ? "All Beneficiaries" : ben}
+                  {ben === "All" ? t.allBeneficiariesFilter : getLocalizedBeneficiary(ben, language)}
                 </option>
               ))}
             </select>
@@ -375,7 +384,7 @@ function ExploreSchemesPage() {
 
           {/* Active Filter Counter */}
           <div className="pt-3 border-t border-slate-100 text-xs text-slate-500">
-            Showing <strong>{sortedSchemes.length}</strong> of {schemes.length} schemes
+            {t.showingSchemesCount} <strong>{sortedSchemes.length}</strong> {t.ofSchemes} {schemes.length} {t.schemesWord}
           </div>
         </div>
 
@@ -388,24 +397,24 @@ function ExploreSchemesPage() {
                 <Search className="w-8 h-8" />
               </div>
               <h3 className="text-base font-bold text-slate-900">
-                No matching schemes found
+                {t.noMatchingSchemes}
               </h3>
               <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto leading-relaxed">
-                We couldn't find any schemes with the current filter criteria. Try clearing some filters or search for common terms.
+                {t.noMatchingDesc}
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-2">
                 <button
                   onClick={resetFilters}
                   className="px-4 py-2 rounded-xl bg-blue-950 text-white text-xs font-bold hover:bg-blue-900 shadow-md transition-colors"
                 >
-                  Clear All Filters
+                  {t.clearAllFilters}
                 </button>
                 <Link
                   to="/finder"
                   className="px-4 py-2 rounded-xl border border-slate-300 bg-white text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors flex items-center space-x-1"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                  <span>Ask AI Scheme Finder</span>
+                  <span>{t.smartFinder}</span>
                 </Link>
               </div>
             </div>
@@ -432,11 +441,11 @@ function ExploreSchemesPage() {
                 disabled={currentPage === 1}
                 className="px-4 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 transition-colors"
               >
-                Previous
+                {t.previous}
               </button>
 
               <div className="text-xs font-medium text-slate-500">
-                Page <strong className="text-slate-900">{currentPage}</strong> of{" "}
+                {t.pageOf} <strong className="text-slate-900">{currentPage}</strong> {t.ofSchemes}{" "}
                 <strong className="text-slate-900">{totalPages}</strong>
               </div>
 
@@ -445,7 +454,7 @@ function ExploreSchemesPage() {
                 disabled={currentPage === totalPages}
                 className="px-4 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 transition-colors"
               >
-                Next
+                {t.next}
               </button>
             </div>
           )}

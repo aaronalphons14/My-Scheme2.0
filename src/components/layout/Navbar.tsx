@@ -130,7 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
               aria-label={isSpeakingNav ? "Stop reading" : "Read page summary aloud"}
             >
               {isSpeakingNav ? <VolumeX className="w-3.5 h-3.5 text-amber-400 animate-pulse" /> : <Volume2 className="w-3.5 h-3.5" />}
-              <span>{isSpeakingNav ? "Stop Audio" : "Screen Audio"}</span>
+              <span>{isSpeakingNav ? t.stopAudio : t.screenAudio}</span>
             </button>
 
             {/* Accessibility Settings Trigger */}
@@ -215,7 +215,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                     {t.portalName}
                   </span>
                   <span className="inline-flex items-center px-1.5 py-0.5 rounded-xs text-[9px] font-bold bg-blue-100 text-blue-900 leading-none">
-                    Official
+                    {t.official}
                   </span>
                 </div>
               </Link>
@@ -230,7 +230,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                       : "hover:text-blue-950 hover:bg-slate-100/80"
                   }`}
                 >
-                  Explore
+                  {t.explore}
                 </Link>
 
                 <Link
@@ -242,7 +242,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                   }`}
                 >
                   <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse shrink-0" />
-                  <span>AI Finder</span>
+                  <span>{t.smartFinder}</span>
                   <span className="text-[9px] font-black px-1.5 py-0.2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white uppercase tracking-wider leading-none">
                     AI
                   </span>
@@ -257,7 +257,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                   }`}
                 >
                   <Scale className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <span>Compare</span>
+                  <span>{t.compare}</span>
                   {comparedSchemes.length > 0 && (
                     <span className="w-4 h-4 rounded-full bg-blue-700 text-white text-[10px] flex items-center justify-center font-bold">
                       {comparedSchemes.length}
@@ -278,7 +278,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                     }`}
                     aria-expanded={servicesDropdownOpen}
                   >
-                    <span>Services</span>
+                    <span>{t.services}</span>
                     <ChevronDown
                       className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-200 ${
                         servicesDropdownOpen ? "rotate-180" : ""
@@ -294,7 +294,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                       />
                       <div className="absolute left-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs animate-in fade-in slide-in-from-top-2 duration-150">
                         <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
-                          Citizen Tools
+                          {t.citizenTools}
                         </div>
                         <Link
                           to="/documents"
@@ -343,7 +343,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
               >
                 <div className="flex items-center space-x-1.5 min-w-0">
                   <Search className="w-3.5 h-3.5 text-blue-900 shrink-0" />
-                  <span className="font-medium truncate">Search...</span>
+                  <span className="font-medium truncate">{t.searchSchemes}...</span>
                 </div>
                 <kbd className="hidden lg:inline-block px-1 py-0.5 text-[9px] font-mono bg-white rounded-sm border border-slate-300 text-slate-400 shrink-0">
                   Ctrl K
@@ -507,7 +507,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                           className="flex items-center space-x-2.5 px-4 py-2 hover:bg-slate-50 text-slate-700 font-medium transition-colors"
                         >
                           <User className="w-4 h-4 text-blue-900 shrink-0" />
-                          <span>View Full Profile</span>
+                          <span>{t.viewProfile}</span>
                         </Link>
                         <Link
                           to="/documents"
@@ -515,7 +515,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                           className="flex items-center space-x-2.5 px-4 py-2 hover:bg-slate-50 text-slate-700 font-medium transition-colors"
                         >
                           <FileText className="w-4 h-4 text-blue-900 shrink-0" />
-                          <span>Document Locker</span>
+                          <span>{t.myDocuments}</span>
                         </Link>
                         <Link
                           to="/applications"
@@ -523,7 +523,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                           className="flex items-center space-x-2.5 px-4 py-2 hover:bg-slate-50 text-slate-700 font-medium transition-colors"
                         >
                           <Clock className="w-4 h-4 text-blue-900 shrink-0" />
-                          <span>Track Applications</span>
+                          <span>{t.myApplications}</span>
                         </Link>
                         <Link
                           to="/profile"
@@ -531,7 +531,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                           className="flex items-center space-x-2.5 px-4 py-2 hover:bg-slate-50 text-slate-700 font-medium transition-colors"
                         >
                           <Bookmark className="w-4 h-4 text-blue-900 shrink-0" />
-                          <span>Saved Schemes ({savedSchemes.length})</span>
+                          <span>{t.savedSchemes} ({savedSchemes.length})</span>
                         </Link>
                       </div>
                     </div>
@@ -679,7 +679,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
             }`}
           >
             <Compass className="w-5 h-5 mb-0.5" />
-            <span>Explore</span>
+            <span>{t.explore}</span>
           </Link>
 
           <Link
@@ -689,7 +689,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
             <div className="w-10 h-10 -mt-5 rounded-full bg-gradient-to-tr from-blue-950 via-blue-900 to-indigo-800 text-white flex items-center justify-center shadow-lg shadow-blue-900/30 group-active:scale-95 transition-transform">
               <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
             </div>
-            <span className="text-[10px] font-bold text-blue-950 mt-0.5">AI Finder</span>
+            <span className="text-[10px] font-bold text-blue-950 mt-0.5">{t.smartFinder}</span>
           </Link>
 
           <Link
@@ -699,7 +699,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
             }`}
           >
             <Clock className="w-5 h-5 mb-0.5" />
-            <span>Track</span>
+            <span>{t.myApplications}</span>
           </Link>
 
           <Link
@@ -711,7 +711,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
             <div className="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-bold mb-0.5">
               {profile.name ? profile.name.charAt(0).toUpperCase() : "U"}
             </div>
-            <span>Profile</span>
+            <span>{t.profile}</span>
           </Link>
         </div>
       </nav>
