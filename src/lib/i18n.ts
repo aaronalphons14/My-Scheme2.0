@@ -109,6 +109,11 @@ export type Translations = {
   navServices: string;
   navSearch: string;
   officialBadge: string;
+  themeMode: string;
+  lightTheme: string;
+  darkTheme: string;
+  switchToDark: string;
+  switchToLight: string;
 };
 
 export const translations: Record<LanguageCode, Translations> = {
@@ -221,6 +226,11 @@ export const translations: Record<LanguageCode, Translations> = {
     navServices: "Services",
     navSearch: "Search",
     officialBadge: "Official",
+    themeMode: "Display Theme",
+    lightTheme: "Light Mode",
+    darkTheme: "Dark Mode",
+    switchToDark: "Switch to Dark Theme",
+    switchToLight: "Switch to Light Theme",
   },
   hi: {
     portalName: "मायस्कीम 2.0",
@@ -331,6 +341,11 @@ export const translations: Record<LanguageCode, Translations> = {
     navServices: "सेवाएं",
     navSearch: "खोजें",
     officialBadge: "आधिकारिक",
+    themeMode: "थीम मोड",
+    lightTheme: "लाइट मोड",
+    darkTheme: "डार्क मोड",
+    switchToDark: "डार्क मोड में बदलें",
+    switchToLight: "लाइट मोड में बदलें",
   },
   ta: {
     portalName: "மைஸ்கீம் 2.0",
@@ -441,6 +456,11 @@ export const translations: Record<LanguageCode, Translations> = {
     navServices: "சேவைகள்",
     navSearch: "தேடுக",
     officialBadge: "அரசு",
+    themeMode: "தீம் முறை",
+    lightTheme: "வெளிச்ச தீம்",
+    darkTheme: "இருண்ட தீம்",
+    switchToDark: "இருண்ட பயன்முறைக்கு மாறவும்",
+    switchToLight: "வெளிச்ச பயன்முறைக்கு மாறவும்",
   },
   te: {
     portalName: "మైస్కీమ్ 2.0",
@@ -551,6 +571,11 @@ export const translations: Record<LanguageCode, Translations> = {
     navServices: "సేవలు",
     navSearch: "శోధన",
     officialBadge: "అధికారిక",
+    themeMode: "థీమ్ మోడ్",
+    lightTheme: "లైట్ మోడ్",
+    darkTheme: "డార్క్ మోడ్",
+    switchToDark: "డార్క్ మోడ్‌కి మారండి",
+    switchToLight: "లైట్ మోడ్‌కి మారండి",
   },
   kn: {
     portalName: "ಮೈಸ್ಕೀಮ್ 2.0",
@@ -661,6 +686,11 @@ export const translations: Record<LanguageCode, Translations> = {
     navServices: "ಸೇವೆಗಳು",
     navSearch: "ಹುಡುಕಿ",
     officialBadge: "ಅಧಿಕೃತ",
+    themeMode: "ಥೀಮ್ ಮೋಡ್",
+    lightTheme: "ಲೈಟ್ ಮೋಡ್",
+    darkTheme: "ಡಾರ್ಕ್ ಮೋಡ್",
+    switchToDark: "ಡಾರ್ಕ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ",
+    switchToLight: "ಲೈಟ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ",
   },
   ml: {
     portalName: "മൈസ്കീം 2.0",
@@ -771,5 +801,10 @@ export const translations: Record<LanguageCode, Translations> = {
     navServices: "സേവനങ്ങൾ",
     navSearch: "തിരയുക",
     officialBadge: "ഔദ്യോഗികം",
+    themeMode: "തീം മോഡ്",
+    lightTheme: "ലൈറ്റ് മോഡ്",
+    darkTheme: "ഡാർക്ക് മോഡ്",
+    switchToDark: "ഡാർക്ക് മോഡിലേക്ക് മാറ്റുക",
+    switchToLight: "ലൈറ്റ് മോഡിലേക്ക് മാറ്റുക",
   },
 };

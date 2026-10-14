@@ -55,6 +55,7 @@ export type AccessibilitySettings = {
   voiceAssistance: boolean;
   voiceSearch: boolean;
   reduceMotion: boolean;
+  theme?: "light" | "dark";
 };
 
 export type LanguageCode = "en" | "hi" | "ta" | "te" | "kn" | "ml";

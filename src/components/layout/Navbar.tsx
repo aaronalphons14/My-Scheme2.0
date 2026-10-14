@@ -21,6 +21,8 @@ import {
   Scale,
   ChevronDown,
   User,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { useSchemeStore } from "@/lib/store";
 import type { LanguageCode } from "@/lib/types";
@@ -45,6 +47,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
     unreadCount,
     notifications,
     markNotificationRead,
+    theme,
+    toggleTheme,
   } = useSchemeStore();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -141,6 +145,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
             >
               <Eye className="w-3.5 h-3.5 text-amber-400" />
               <span className="font-medium">A+ / A-</span>
+            </button>
+
+            {/* Dark/Light Theme Switcher Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="inline-flex items-center space-x-1 text-slate-200 hover:text-white px-2 py-0.5 rounded-sm hover:bg-slate-800 transition-colors whitespace-nowrap cursor-pointer"
+              aria-label={theme === "dark" ? t.switchToLight : t.switchToDark}
+              title={theme === "dark" ? t.switchToLight : t.switchToDark}
+            >
+              {theme === "dark" ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="font-semibold text-[11px]">{t.lightTheme}</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-blue-300" />
+                  <span className="font-semibold text-[11px]">{t.darkTheme}</span>
+                </>
+              )}
             </button>
 
             {/* Language Switcher Dropdown */}
@@ -531,6 +555,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                           <span>{t.savedSchemes} ({savedSchemes.length})</span>
                         </Link>
                       </div>
+
+                      {/* Theme Toggle within Profile Dropdown */}
+                      <div className="border-t border-slate-100 pt-1 text-xs">
+                        <button
+                          onClick={() => toggleTheme()}
+                          className="w-full flex items-center justify-between px-4 py-2 hover:bg-slate-50 text-slate-700 font-medium transition-colors cursor-pointer"
+                        >
+                          <div className="flex items-center space-x-2.5">
+                            {theme === "dark" ? (
+                              <Sun className="w-4 h-4 text-amber-500 shrink-0" />
+                            ) : (
+                              <Moon className="w-4 h-4 text-slate-600 shrink-0" />
+                            )}
+                            <span>{t.themeMode}</span>
+                          </div>
+                          <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 font-semibold text-slate-600">
+                            {theme === "dark" ? t.darkTheme : t.lightTheme}
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   </>
                 )}
@@ -648,6 +692,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch, onOpenA11y }) => {
                 <HelpCircle className="w-4 h-4 text-blue-900" />
                 <span>{t.help}</span>
               </Link>
+
+              {/* Theme Switcher in Mobile Menu */}
+              <div className="pt-2 border-t border-slate-100">
+                <button
+                  onClick={() => toggleTheme()}
+                  className="w-full flex items-center justify-between p-2.5 rounded-lg hover:bg-slate-100 text-slate-800 text-sm font-medium transition-colors"
+                >
+                  <div className="flex items-center space-x-2">
+                    {theme === "dark" ? (
+                      <Sun className="w-4 h-4 text-amber-500" />
+                    ) : (
+                      <Moon className="w-4 h-4 text-slate-600" />
+                    )}
+                    <span>{t.themeMode}</span>
+                  </div>
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 font-semibold">
+                    {theme === "dark" ? t.darkTheme : t.lightTheme}
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         )}

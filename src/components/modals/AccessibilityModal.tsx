@@ -1,5 +1,5 @@
 import React from "react";
-import { X, Eye, Volume2, Mic, Sparkles, RefreshCcw, Check } from "lucide-react";
+import { X, Eye, Volume2, Mic, Sparkles, RefreshCcw, Check, Sun, Moon } from "lucide-react";
 import { useSchemeStore } from "@/lib/store";
 
 interface AccessibilityModalProps {
@@ -8,7 +8,7 @@ interface AccessibilityModalProps {
 }
 
 export const AccessibilityModal: React.FC<AccessibilityModalProps> = ({ isOpen, onClose }) => {
-  const { a11y, updateA11y, t, language } = useSchemeStore();
+  const { a11y, updateA11y, t, language, theme, setTheme } = useSchemeStore();
 
   if (!isOpen) return null;
 
@@ -132,6 +132,42 @@ export const AccessibilityModal: React.FC<AccessibilityModalProps> = ({ isOpen, 
             </div>
           </div>
 
+          {/* Theme Mode Selection */}
+          <div>
+            <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+              {t.themeMode}
+            </label>
+            <div className="grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => setTheme("light")}
+                className={`p-3 rounded-xl border flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                  theme === "light"
+                    ? "border-blue-900 bg-blue-50 text-blue-950 font-bold ring-2 ring-blue-900/20 shadow-xs"
+                    : "border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                <Sun className={`w-4 h-4 ${theme === "light" ? "text-amber-500" : "text-slate-500"}`} />
+                <span className="text-sm font-semibold">{t.lightTheme}</span>
+                {theme === "light" && <Check className="w-3.5 h-3.5 ml-1 text-blue-900" />}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setTheme("dark")}
+                className={`p-3 rounded-xl border flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                  theme === "dark"
+                    ? "border-blue-900 bg-blue-50 text-blue-950 font-bold ring-2 ring-blue-900/20 shadow-xs"
+                    : "border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                <Moon className={`w-4 h-4 ${theme === "dark" ? "text-blue-400" : "text-slate-500"}`} />
+                <span className="text-sm font-semibold">{t.darkTheme}</span>
+                {theme === "dark" && <Check className="w-3.5 h-3.5 ml-1 text-blue-900" />}
+              </button>
+            </div>
+          </div>
+
           {/* High Contrast Mode */}
           <div className="flex items-center justify-between p-3.5 rounded-xl border border-slate-200 bg-slate-50/70">
             <div>
@@ -215,15 +251,16 @@ export const AccessibilityModal: React.FC<AccessibilityModalProps> = ({ isOpen, 
         {/* Footer actions */}
         <div className="flex items-center justify-between border-t border-slate-100 pt-4">
           <button
-            onClick={() =>
+            onClick={() => {
+              setTheme("light");
               updateA11y({
                 textSize: "normal",
                 highContrast: false,
                 voiceAssistance: false,
                 voiceSearch: true,
                 reduceMotion: false,
-              })
-            }
+              });
+            }}
             className="flex items-center space-x-1.5 text-xs text-slate-500 hover:text-slate-800 transition-colors"
           >
             <RefreshCcw className="w-3.5 h-3.5" />

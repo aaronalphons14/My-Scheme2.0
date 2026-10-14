@@ -132,10 +132,26 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var t = localStorage.getItem('myscheme_theme');
+                  if (t === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body
         suppressHydrationWarning
-        className="bg-slate-50/50 text-slate-900 antialiased font-sans min-h-screen selection:bg-blue-900 selection:text-white"
+        className="bg-slate-50/50 text-slate-900 dark:bg-[#0b1120] dark:text-slate-100 antialiased font-sans min-h-screen selection:bg-blue-900 selection:text-white"
       >
         {children}
         <Scripts />

@@ -40,6 +40,9 @@ type SchemeStoreContextType = {
   closeApplyModal: () => void;
   isOnboardingOpen: boolean;
   setIsOnboardingOpen: (open: boolean) => void;
+  theme: "light" | "dark";
+  toggleTheme: () => void;
+  setTheme: (theme: "light" | "dark") => void;
 };
 
 const defaultProfile: UserProfile = {
@@ -370,6 +373,42 @@ export const SchemeStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const [applySchemeId, setApplySchemeId] = useState<string | null>(null);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
 
+  // Theme state: default to light, persist to localStorage
+  const [theme, setThemeState] = useState<"light" | "dark">(() => {
+    if (typeof window === "undefined") return "light";
+    try {
+      const stored = localStorage.getItem("myscheme_theme");
+      if (stored === "dark" || stored === "light") return stored;
+    } catch {
+      // ignore
+    }
+    return "light";
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("myscheme_theme", theme);
+    } catch {
+      // ignore
+    }
+    if (typeof document !== "undefined") {
+      const root = document.documentElement;
+      if (theme === "dark") {
+        root.classList.add("dark");
+      } else {
+        root.classList.remove("dark");
+      }
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
+  };
+
+  const setTheme = (newTheme: "light" | "dark") => {
+    setThemeState(newTheme);
+  };
+
   // Synchronize localStorage
   useEffect(() => {
     try {
@@ -614,6 +653,9 @@ export const SchemeStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
         closeApplyModal,
         isOnboardingOpen,
         setIsOnboardingOpen,
+        theme,
+        toggleTheme,
+        setTheme,
       }}
     >
       {children}
